@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+  <g.mine>
+    <window clipClient="1" size="0,0" columnWeight="1" rowWeight="1" id="{{id}}" colorBkgnd="@color/gray" data="{{data}}" text="{{text}}"/>
+  </g.mine>
+</template>
