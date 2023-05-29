@@ -2,6 +2,16 @@
 <template>
   <g.mine>
     <stack id="{{id}}" clipClient="1" size="0,0" columnWeight="1" rowWeight="1" curSel="0">
+    <!--
+    const Status ={
+	init:0,		//init
+	flag_mine:1, //mark as mine
+	flag_wrong:2,//reveal wrong
+	flag_ques:3, //mark as question
+	mine:4,		 //explored
+	nomine:5,    //confirmed
+    };
+    -->
       <button name="page_btn" id="{{id}}"/>
       <animateimg name="page_flag" skin="tile_flag" msgTransparent="1"/>
       <img name="page_flag_wrong" skin="tile_flag_wrong" msgTransparent="1"/>

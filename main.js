@@ -3,12 +3,12 @@ import * as std from "std";
 var g_workDir="";
 
 const Status ={
-	init:0,
-	flag:1,
-	flag_wrong:2,
-	ques:3,
-	isMine:4,
-	notMine:5,
+	init:0,		//init
+	flag_mine:1, //mark as mine
+	flag_wrong:2,//reveal wrong
+	flag_ques:3, //mark as question
+	mine:4,		 //explored
+	nomine:5,    //confirmed
 };
 
 //定义一个全局的信息
@@ -17,6 +17,8 @@ const boardInfo = [
 	[16,16,20],
 	[30,16,99]
 ];
+
+const base_id=1000;
 
 class MineBoard{
 	constructor(mode,mainDlg){
@@ -29,6 +31,7 @@ class MineBoard{
 	}
 	//state. 0 - init, 1- explored, 2- marked
 	reset(){
+		
 		this.board = [];
 		for(let i=0;i<this.rows;i++){
 			this.board.push([]);
@@ -87,27 +90,28 @@ class MineBoard{
 		return ret;
 	}
 
+	getState(x,y){
+		return this.board[y][x].state;
+	}
+
 	setMark(x,y){
 		this.board[y][x].state = Status.flag;//set to question
 		this.mainDlg.onSetGridState(this.mode,x,y,this.board[y][x].state);
 	}
 
 	setMine(x,y,isMine){
-		this.board[y][x].state = isMine?Status.isMine:Status.notMine; //guess is as mine
+		this.board[y][x].state = isMine?Status.flag_mine:Status.nomine; //guess is as mine
+		if(this.board[y][x].mine && !isMine)
+		{
+			this.board[y][x].state = Status.mine;
+			console.log("you clicked a mine",y,x);
+		}	
 		this.mainDlg.onSetGridState(this.mode,x,y,this.board[y][x].state);
-		if(this.board[y][x].mine){
-			if(!isMine)
-				return false;
+		if(!this.board[y][x].mine && !isMine){
+			return this.autoExplore(x,y);
 		}else{
-			if(!isMine){
-				this.autoExplore(x,y);
-			}
+			return this.board[y][x].state != Status.mine;
 		}
-		return true;
-	}
-
-	getState(x,y){
-		return this.board[y][x].state;
 	}
 
 	autoExplore(x,y){
@@ -122,24 +126,27 @@ class MineBoard{
 		y2 = Math.min(y2,this.rows-1);
 
 		let explored = 0;
-		for(let i=y1;i<y2;i++){
-			for(let j=x1;j<x2;j++){
+		for(let i=y1;i<=y2;i++){
+			for(let j=x1;j<=x2;j++){
 				if(i==y && j==x)
 					continue;
-				if(this.board[i][j].state == Status.notMine)
+				if(this.board[i][j].state == Status.nomine)
 					explored++;
 			}
 		}
 		let ret = true;
 		if(explored == mines){
-			//auto explore other hided empty grid
-			for(let i=y1;i<y2 && ret;i++){
-				for(let j=x1;j<x2 && ret;j++){
+			//auto explore other hided grid
+			for(let i=y1;i<=y2 && ret;i++){
+				for(let j=x1;j<=x2 && ret;j++){
 					if(i==y && j==x)
 						continue;
 					if(this.board[i][j].state == Status.init)
 					{
 						ret = this.setMine(j,i,false);
+						if(!ret){
+							console.log("explore error",i,j);
+						}
 					}
 				}
 			}
@@ -152,8 +159,6 @@ class MineBoard{
 	}
 }
 
-
-const base_id=1000;
 
 class MainDialog extends soui4.JsHostWnd{
 	constructor(){
@@ -175,7 +180,7 @@ class MainDialog extends soui4.JsHostWnd{
 		let grid = board.FindIChildByID(base_id+idx);
 		let stackApi = soui4.QiIStackView(grid);
 		stackApi.SelectView(state,true);
-		if(state == Status.notMine){
+		if(state == Status.nomine){
 			let img = grid.FindIChildByName("page_num");
 			let imgApi = soui4.QiIImageWnd(img);
 			let mines = this.getCurBoard().getRoundMines(x,y);
@@ -205,6 +210,8 @@ class MainDialog extends soui4.JsHostWnd{
 	}
 	
 	onClickGrid(x,y){
+		if(this.getCurBoard().getState(x,y)!=Status.init)
+			return;
 		console.log("onClickGrid",y,x);
 		this.getCurBoard().setMine(x,y,false);
 	}
