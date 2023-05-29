@@ -41,6 +41,15 @@ class MineBoard{
 			let y = Math.floor(Math.random()*this.rows);
 			this.board[y][x].mine=true;
 		}
+		if(this.mode == 0){
+			for(let i=0;i<this.rows;i++){
+				let states= new Array(this.cols);
+				for(let j=0;j<this.cols;j++){
+					states[j] = this.board[i][j].mine?1:0;
+				}
+				console.log(states);
+			}
+		}
 	}
 
 	index2cord(idx){
