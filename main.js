@@ -4,9 +4,11 @@ var g_workDir="";
 
 const Status ={
 	init:0,
-	mark:1,
-	isMine:2,
-	notMine:3,
+	flag:1,
+	flag_wrong:2,
+	ques:3,
+	isMine:4,
+	notMine:5,
 };
 
 //定义一个全局的信息
@@ -77,7 +79,7 @@ class MineBoard{
 	}
 
 	setMark(x,y){
-		this.board[y][x].state = Status.mark;//set to question
+		this.board[y][x].state = Status.flag;//set to question
 		this.mainDlg.onSetGridState(this.mode,x,y,this.board[y][x].state);
 	}
 
@@ -163,7 +165,14 @@ class MainDialog extends soui4.JsHostWnd{
 		let idx = this.getCurBoard().cord2index(x,y);
 		let grid = board.FindIChildByID(base_id+idx);
 		let stackApi = soui4.QiIStackView(grid);
-		stackApi.SelectView(1,true);
+		stackApi.SelectView(state,true);
+		if(state == Status.notMine){
+			let img = grid.FindIChildByName("page_num");
+			let imgApi = soui4.QiIImageWnd(img);
+			let mines = this.getCurBoard().getRoundMines(x,y);
+			imgApi.SetIcon(mines);
+			imgApi.Release();
+		}
 		stackApi.Release();
 	}
 
@@ -188,7 +197,7 @@ class MainDialog extends soui4.JsHostWnd{
 	
 	onClickGrid(x,y){
 		console.log("onClickGrid",y,x);
-		this.getCurBoard().setMine(x,y,true);
+		this.getCurBoard().setMine(x,y,false);
 	}
 
 	onBtnTest(e){
