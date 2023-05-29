@@ -41,6 +41,16 @@ class MineBoard{
 		}
 	}
 
+	index2cord(idx){
+		let ret = {x:0,y:0};
+		ret.y = Math.floor(idx/this.cols);
+		ret.x = idx%this.cols;
+		return ret;
+	}
+	cord2index(x,y){
+		return y*this.cols+x;
+	}
+
 	isMine(x,y){
 		return this.board[y][x].mine;
 	}
@@ -125,6 +135,10 @@ class MineBoard{
 		}
 		return ret;
 	}
+
+	getGrids(){
+		return this.rows*this.cols;
+	}
 }
 
 
@@ -138,11 +152,23 @@ class MainDialog extends soui4.JsHostWnd{
 		for(let i=0;i<3;i++){
 			this.board.push(new MineBoard(i,this));
 		}
+		this.mode = 0;
 	}
 
 	onSetGridState(mode,x,y,state){
 		//update state
-		console.log("onSetGridState",mode,x,y,state);
+		console.log("onSetGridState",mode,y,x,state);
+		const board_names=["board_easy","board_middle","board_hard"];
+		let board = this.FindIChildByName(board_names[this.mode]);
+		let idx = this.getCurBoard().cord2index(x,y);
+		let grid = board.FindIChildByID(base_id+idx);
+		let stackApi = soui4.QiIStackView(grid);
+		stackApi.SelectView(1,true);
+		stackApi.Release();
+	}
+
+	getCurBoard(){
+		return this.board[this.mode];
 	}
 
 	onEvent(e){
@@ -150,10 +176,21 @@ class MainDialog extends soui4.JsHostWnd{
 			this.init();
 		}else if(e.GetID()==soui4.EVT_EXIT){
 			this.uninit();
+		}else if(e.GetID()==soui4.EVT_CMD){
+			let id = e.Sender().GetID();
+			if(id>=base_id && id<base_id+this.getCurBoard().getGrids()){
+				let cord = this.getCurBoard().index2cord(id - base_id);
+				this.onClickGrid(cord.x,cord.y);
+			}
 		}
 		return false;
 	}
 	
+	onClickGrid(x,y){
+		console.log("onClickGrid",y,x);
+		this.getCurBoard().setMine(x,y,true);
+	}
+
 	onBtnTest(e){
 		console.log("you click test button");
 		soui4.SMessageBox(this.GetHwnd(),"you click test button","test",soui4.MB_OK);
@@ -163,9 +200,10 @@ class MainDialog extends soui4.JsHostWnd{
 		let stack_board = this.FindIChildByName("stack_board");
 		let stackApi = soui4.QiIStackView(stack_board);
 		let id = e.Sender().GetID();
-		stackApi.SelectView(id-200);
+		stackApi.SelectView(id-200,true);
 		this.board[id-200].reset();
 		stackApi.Release();
+		this.mode = id-200;
 	}
 
 	buildBoard(mode){
@@ -180,7 +218,7 @@ class MainDialog extends soui4.JsHostWnd{
 		for(let i=0;i<grids;i++){
 			let y = Math.floor(i / cols);
 			let x = i%cols;
-			let ele = "<data id=\""+(500+i)+"\" data=\""+(base_id+i)+"\"" +" text=\"" + this.board[mode].getRoundMines(x,y)+"\"" +"/>";
+			let ele = "<data id=\""+(base_id+i)+"\" data=\""+(base_id+i)+"\"" +" text=\"" + this.board[mode].getRoundMines(x,y)+"\"" +"/>";
 			xml += head+ele+tail;
 		}
 		return xml;

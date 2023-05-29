@@ -1,1 +1,1 @@
-{"version":"0.2.0","configurations":[{"name":"Launch QuickJS","type":"quickjs","request":"launch","program":"${workspaceFolder}","runtimeExecutable":"D:\\work\\soui4js/bin/soui4js-host.exe","address":"localhost","port":58585}]}
+{"version":"0.2.0","configurations":[{"name":"Launch QuickJS","type":"quickjs","request":"launch","program":"${workspaceFolder}","runtimeExecutable":"D:\\qjs\\soui4js/bin/soui4js-host.exe","address":"localhost","port":58585}]}

@@ -1,4 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-
 <skin>
+    <imglist name="tile_num" src="img:tile_num" states="9"/>
+    <imglist name="tile_ques" src="img:tile_ques" states="3"/>
+    <imglist name="tile_flag" src="img:tile_flag" states="3"/>
+    <imglist name="tile_flag_wrong" src="img:tile_flag_wrong"/>
+    <imglist name="tile_mine" src="img:tile_mine"/>
 </skin>

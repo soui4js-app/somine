@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <template>
   <g.mine>
-    <window clipClient="1" size="0,0" columnWeight="1" rowWeight="1" id="{{id}}" colorBkgnd="@color/gray" data="{{data}}" text="{{text}}"/>
+    <stack id="{{id}}" clipClient="1" size="0,0" columnWeight="1" rowWeight="1" curSel="0">
+      <button name="page_btn" id="{{id}}"/>
+      <animateimg name="page_flag" skin="tile_flag" msgTransparent="1"/>
+      <img name="page_flag_wrong" skin="tile_flag_wrong" msgTransparent="1"/>
+      <animateimg name="page_ques" skin="tile_ques" msgTransparent="1"/>
+      <img name="page_mine" skin="tile_mine" msgTransparent="1"/>
+    </stack>
   </g.mine>
 </template>

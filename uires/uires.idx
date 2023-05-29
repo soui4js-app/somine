@@ -15,4 +15,11 @@
   <ICON>
     <file name="ICON_LOGO"  path="image\soui.ico"/>
   </ICON>
+  <img>
+    <file name="tile_num"  path="image\tile_num.png"/>
+    <file name="tile_ques"  path="image\tile_ques.png"/>
+    <file name="tile_flag"  path="image\tile_flag.png"/>
+    <file name="tile_mine"  path="image\tile_mine.png"/>
+    <file name="tile_flag_wrong"  path="image\tile_flag_wrong.png"/>
+  </img>
 </resource>
