@@ -125,17 +125,17 @@ class MineBoard{
 		y1 = Math.max(y1,0);
 		y2 = Math.min(y2,this.rows-1);
 
-		let explored = 0;
+		let marked = 0;
 		for(let i=y1;i<=y2;i++){
 			for(let j=x1;j<=x2;j++){
 				if(i==y && j==x)
 					continue;
-				if(this.board[i][j].state == Status.nomine)
-					explored++;
+				if(this.board[i][j].state == Status.flag_mine)
+					marked++;
 			}
 		}
 		let ret = true;
-		if(explored == mines){
+		if(marked == mines){
 			//auto explore other hided grid
 			for(let i=y1;i<=y2 && ret;i++){
 				for(let j=x1;j<=x2 && ret;j++){
