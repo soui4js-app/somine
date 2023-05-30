@@ -94,9 +94,9 @@ class MineBoard{
 		return this.board[y][x].state;
 	}
 
-	setMark(x,y){
-		this.board[y][x].state = Status.flag;//set to question
-		this.mainDlg.onSetGridState(this.mode,x,y,this.board[y][x].state);
+	setState(x,y,state){
+		this.board[y][x].state = state;//set to question
+		this.mainDlg.onSetGridState(this.mode,x,y,state);
 	}
 
 	setMine(x,y,isMine){
@@ -169,6 +169,7 @@ class MainDialog extends soui4.JsHostWnd{
 			this.board.push(new MineBoard(i,this));
 		}
 		this.mode = 0;
+		this.enableQuestion=true;
 	}
 
 	onSetGridState(mode,x,y,state){
@@ -195,15 +196,23 @@ class MainDialog extends soui4.JsHostWnd{
 	}
 
 	onEvent(e){
-		if(e.GetID()==soui4.EVT_INIT){//event_init
+		let evt_id = e.GetID();
+		if(evt_id==soui4.EVT_INIT){//event_init
 			this.init();
-		}else if(e.GetID()==soui4.EVT_EXIT){
+		}else if(evt_id==soui4.EVT_EXIT){
 			this.uninit();
-		}else if(e.GetID()==soui4.EVT_CMD){
+		}else if(evt_id==soui4.EVT_MOUSE_CLICK){
+			let evt = soui4.toEventMouseClick(e);
 			let id = e.Sender().GetID();
 			if(id>=base_id && id<base_id+this.getCurBoard().getGrids()){
 				let cord = this.getCurBoard().index2cord(id - base_id);
-				this.onClickGrid(cord.x,cord.y);
+				let clickId = evt.clickId;
+				console.log("on mouse clock,clickId="+clickId);
+				if(clickId == soui4.MOUSE_LBTN_UP)
+					this.onClickGrid(cord.x,cord.y);
+				else if(clickId == soui4.MOUSE_RBTN_UP){
+					this.onRclickGrid(cord.x,cord.y);
+				}
 			}
 		}
 		return false;
@@ -215,10 +224,30 @@ class MainDialog extends soui4.JsHostWnd{
 		console.log("onClickGrid",y,x);
 		this.getCurBoard().setMine(x,y,false);
 	}
+	
+	onRclickGrid(x,y){
+		let stat = this.getCurBoard().getState(x,y);
+		if(stat==Status.nomine)
+			return;
+		console.log("onRclickGrid",y,x);
+		if(stat == Status.init)
+			this.getCurBoard().setMine(x,y,true);
+		else {
+			if(this.enableQuestion){
+				if(stat == Status.flag_mine)
+					this.getCurBoard().setState(x,y,Status.flag_ques);
+				else if(stat == Status.flag_ques)
+					this.getCurBoard().setState(x,y,Status.init);
+			}else if(stat == Status.flag_mine)
+			{
+				this.getCurBoard().setState(x,y,Status.init);				
+			}
+		}
+	}
 
-	onBtnTest(e){
-		console.log("you click test button");
-		soui4.SMessageBox(this.GetHwnd(),"you click test button","test",soui4.MB_OK);
+	onEnableQuestion(e){
+		let wnd = soui4.toIWindow(e.Sender());
+		this.enableQuestion = wnd.IsChecked();
 	}
 
 	onOptBtn(e){
@@ -267,7 +296,7 @@ class MainDialog extends soui4.JsHostWnd{
 			board.CreateChildrenFromXml(this.buildBoard(2));	
 		}
 
-		soui4.SConnect(this.FindIChildByName("btn_test"),soui4.EVT_CMD,this,this.onBtnTest);
+		soui4.SConnect(this.FindIChildByName("chk_enable_ques"),soui4.EVT_CMD,this,this.onEnableQuestion);
 	}
 
 	uninit(){

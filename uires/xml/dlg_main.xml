@@ -15,13 +15,13 @@ translucent="1"
       	<imgbtn id="sysid_close" skin="_skin.sys.btn.close"    pos="-45,0" tip="close" animate="1"/>
     </caption>
     <window size="-2,0" weight="1" padding="5" layout="vbox">
-		<window size="-2,30" layout="hbox" interval="10">
+		<window size="-2,30" layout="hbox" interval="10" gravity="center">
 			<window size="0,0" weight="1"/>
 			<radio name="opt_easy" id="200" text="Easy" checked="1"/>
 			<radio name="opt_middle" id="201" text="Middle"/>
 			<radio name="opt_hard" id="202" text="Hard"/>
 			<window size="0,0" weight="1"/>
-			<button name="btn_test" text="test" size="100,30"/>
+			<check name="chk_enable_ques" text="enable question" checked="1"/>
 		</window>
 		<stack size="-2,0" weight="1" name="stack_board" curSel="0" aniType="push">
 			<window name="board_easy" colorBkgnd="@color/red" layout="gridlayout" columnCount="9" interval="2" gravity="fill"/>
