@@ -211,7 +211,7 @@ class MainDialog extends soui4.JsHostWnd{
 				let flags = evt.uFlags;
 				if((clickId==soui4.MOUSE_LBTN_DOWN && (flags&soui4.MK_RBUTTON))
 				||(clickId==soui4.MOUSE_RBTN_DOWN && (flags&soui4.MK_LBUTTON))){
-					console.log("click both button");
+					this.onBothClick(cord.x,cord.y);
 					this.clickGrid.x=-1;
 				}else if(clickId == soui4.MOUSE_LBTN_DOWN)
 				{
@@ -233,6 +233,11 @@ class MainDialog extends soui4.JsHostWnd{
 		return false;
 	}
 	
+	onBothClick(x,y){
+		console.log("onBothClick",y,x);
+		this.getCurBoard().autoExplore(x,y);
+	}
+
 	onClickGrid(x,y){
 		if(this.getCurBoard().getState(x,y)!=Status.init)
 			return;
