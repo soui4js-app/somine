@@ -43,7 +43,12 @@ class MineBoard{
 		for(let i=0;i<this.mines;i++){
 			let x = Math.floor(Math.random()*this.cols);
 			let y = Math.floor(Math.random()*this.rows);
-			this.board[y][x].mine=true;
+			if(!this.board[y][x].mine){
+				this.board[y][x].mine=true;
+			}else {
+				//regenerate position.
+				i--;
+			}
 		}
 		if(this.mode == 0){
 			for(let i=0;i<this.rows;i++){
