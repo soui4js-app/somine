@@ -199,8 +199,6 @@ class MainDialog extends soui4.JsHostWnd{
 	}
 
 	onSetGridState(mode,x,y,state){
-		//update state
-		//console.log("onSetGridState",mode,y,x,state);
 		const board_names=["board_easy","board_middle","board_hard"];
 		let board = this.FindIChildByName(board_names[this.mode]);
 		let idx = this.getCurBoard().cord2index(x,y);
@@ -215,6 +213,10 @@ class MainDialog extends soui4.JsHostWnd{
 			imgApi.Release();
 		}
 		stackApi.Release();
+		if(state == Status.mine){
+			console.log("game over");
+			//soui4.SMessageBox(this.GetHwnd(),"better lucky next time!","game over",soui4.MB_OK);
+		}
 	}
 
 	getCurBoard(){
