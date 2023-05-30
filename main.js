@@ -170,6 +170,7 @@ class MainDialog extends soui4.JsHostWnd{
 		}
 		this.mode = 0;
 		this.enableQuestion=true;
+		this.clickGrid={x:-1,y:-1};
 	}
 
 	onSetGridState(mode,x,y,state){
@@ -207,11 +208,25 @@ class MainDialog extends soui4.JsHostWnd{
 			if(id>=base_id && id<base_id+this.getCurBoard().getGrids()){
 				let cord = this.getCurBoard().index2cord(id - base_id);
 				let clickId = evt.clickId;
-				console.log("on mouse clock,clickId="+clickId);
-				if(clickId == soui4.MOUSE_LBTN_UP)
-					this.onClickGrid(cord.x,cord.y);
+				let flags = evt.uFlags;
+				if((clickId==soui4.MOUSE_LBTN_DOWN && (flags&soui4.MK_RBUTTON))
+				||(clickId==soui4.MOUSE_RBTN_DOWN && (flags&soui4.MK_LBUTTON))){
+					console.log("click both button");
+					this.clickGrid.x=-1;
+				}else if(clickId == soui4.MOUSE_LBTN_DOWN)
+				{
+					this.clickGrid = cord;
+				}else if(clickId == soui4.MOUSE_RBTN_DOWN){
+					this.clickGrid = cord;
+				}
+				else if(clickId == soui4.MOUSE_LBTN_UP)
+				{
+					if(cord.x == this.clickGrid.x && cord.y == this.clickGrid.y && evt.bHover)
+						this.onClickGrid(cord.x,cord.y);
+				}	
 				else if(clickId == soui4.MOUSE_RBTN_UP){
-					this.onRclickGrid(cord.x,cord.y);
+					if(cord.x == this.clickGrid.x && cord.y == this.clickGrid.y && evt.bHover)
+						this.onRclickGrid(cord.x,cord.y);
 				}
 			}
 		}
