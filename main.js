@@ -27,11 +27,12 @@ class MineBoard{
 		this.rows = boardInfo[mode][0];
 		this.cols = boardInfo[mode][1];
 		this.mines = boardInfo[mode][2];
+		this.opened = 0;
 		this.reset();
 	}
 	//state. 0 - init, 1- explored, 2- marked
 	reset(){
-		
+		this.opened = 0;
 		this.board = [];
 		for(let i=0;i<this.rows;i++){
 			this.board.push([]);
@@ -53,6 +54,7 @@ class MineBoard{
 				console.log(states);
 			}
 		}
+		
 	}
 
 	index2cord(idx){
@@ -105,8 +107,20 @@ class MineBoard{
 		{
 			this.board[y][x].state = Status.mine;
 			console.log("you clicked a mine",y,x);
+		}else{
+			this.opened++;
 		}	
 		this.mainDlg.onSetGridState(this.mode,x,y,this.board[y][x].state);
+		if(this.board[y][x].state == Status.mine){
+			//failed!
+			this.mainDlg.onResult(false);
+			return false;
+		}
+		else if(this.opened == (this.cols*this.rows-this.mines)){
+			//succeed!
+			this.mainDlg.onResult(true);
+			return false;
+		}
 		if(!this.board[y][x].mine && !isMine){
 			return this.autoExplore(x,y);
 		}else{
@@ -138,7 +152,7 @@ class MineBoard{
 
 	autoExplore(x,y){
 		if(this.board[y][x].state!=Status.nomine)
-			return;
+			return false;
 		let mines = this.getRoundMines(x,y);
 		let x1=x-1;
 		let x2=x+1;
@@ -158,24 +172,21 @@ class MineBoard{
 					marked++;
 			}
 		}
-		let ret = true;
+		let bContinue = true;
 		if(marked == mines){
 			//auto explore other hided grid
-			for(let i=y1;i<=y2 && ret;i++){
-				for(let j=x1;j<=x2 && ret;j++){
+			for(let i=y1;i<=y2 && bContinue;i++){
+				for(let j=x1;j<=x2 && bContinue;j++){
 					if(i==y && j==x)
 						continue;
 					if(this.board[i][j].state == Status.init)
 					{
-						ret = this.setMine(j,i,false);
-						if(!ret){
-							console.log("explore error",i,j);
-						}
+						bContinue = this.setMine(j,i,false);						
 					}
 				}
 			}
 		}
-		return ret;
+		return bContinue;	
 	}
 
 	getGrids(){
@@ -198,6 +209,15 @@ class MainDialog extends soui4.JsHostWnd{
 		this.bothClick = false;
 	}
 
+	onResult(bSucceed){
+		console.log("game over");
+		if(bSucceed){
+			soui4.SMessageBox(this.GetHwnd(),"you win!","game over",soui4.MB_OK);
+		}else{
+			soui4.SMessageBox(this.GetHwnd(),"better lucky next time!","game over",soui4.MB_OK);
+		}
+	}
+
 	onSetGridState(mode,x,y,state){
 		const board_names=["board_easy","board_middle","board_hard"];
 		let board = this.FindIChildByName(board_names[this.mode]);
@@ -213,10 +233,6 @@ class MainDialog extends soui4.JsHostWnd{
 			imgApi.Release();
 		}
 		stackApi.Release();
-		if(state == Status.mine){
-			console.log("game over");
-			//soui4.SMessageBox(this.GetHwnd(),"better lucky next time!","game over",soui4.MB_OK);
-		}
 	}
 
 	getCurBoard(){
