@@ -102,12 +102,13 @@ class MineBoard{
 	}
 
 	setMine(x,y,isMine){
+		if(this.getState(x,y)!=Status.init)
+			return true;
 		this.board[y][x].state = isMine?Status.flag_mine:Status.nomine; //guess is as mine
 		if(this.board[y][x].mine && !isMine)
 		{
 			this.board[y][x].state = Status.mine;
-			console.log("you clicked a mine",y,x);
-		}else{
+		}else if(this.getState(x,y)==Status.nomine){
 			this.opened++;
 		}	
 		this.mainDlg.onSetGridState(this.mode,x,y,this.board[y][x].state);
