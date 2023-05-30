@@ -13,27 +13,28 @@ const Status ={
 
 //定义一个全局的信息
 const boardInfo = [
-	[9,9,9],
-	[16,16,20],
-	[30,16,99]
+	{rows:9,cols:9,mines:9},
+	{rows:16,cols:16,mines:20},
+	{rows:16,cols:30,mines:99}
 ];
+
+const boardName=["board_easy","board_middle","board_hard"];
 
 const base_id=1000;
 
 class MineBoard{
-	constructor(mode,mainDlg){
-		this.mode = mode;
+	constructor(mainDlg){
 		this.mainDlg = mainDlg;
-		this.rows = boardInfo[mode][0];
-		this.cols = boardInfo[mode][1];
-		this.mines = boardInfo[mode][2];
 		this.opened = 0;
-		this.reset();
 	}
-	//state. 0 - init, 1- explored, 2- marked
-	reset(){
+	
+	reset(rows,cols,mines){
 		this.opened = 0;
 		this.board = [];
+		this.rows = rows;
+		this.cols = cols;
+		this.mines = mines;
+
 		for(let i=0;i<this.rows;i++){
 			this.board.push([]);
 			for(let j=0;j<this.cols;j++){
@@ -200,16 +201,18 @@ class MineBoard{
 	}
 }
 
+const Mode={
+	easy:0,
+	middle:1,
+	hard:2,
+};
 
 class MainDialog extends soui4.JsHostWnd{
 	constructor(){
 		super("layout:dlg_main");
 		this.onEvt = this.onEvent;
-		this.board = [];
-		for(let i=0;i<3;i++){
-			this.board.push(new MineBoard(i,this));
-		}
-		this.mode = 0;
+		this.mode = Mode.easy;
+		this.board = new MineBoard(this);
 		this.enableQuestion=true;
 		this.clickGrid={x:-1,y:-1};
 		this.bothClick = false;
@@ -225,8 +228,7 @@ class MainDialog extends soui4.JsHostWnd{
 	}
 
 	onSetGridState(mode,x,y,state){
-		const board_names=["board_easy","board_middle","board_hard"];
-		let board = this.FindIChildByName(board_names[this.mode]);
+		let board = this.FindIChildByName(boardName[this.mode]);
 		let idx = this.getCurBoard().cord2index(x,y);
 		let grid = board.FindIChildByID(base_id+idx);
 		let stackApi = soui4.QiIStackView(grid);
@@ -242,7 +244,7 @@ class MainDialog extends soui4.JsHostWnd{
 	}
 
 	getCurBoard(){
-		return this.board[this.mode];
+		return this.board;
 	}
 
 	onEvent(e){
@@ -350,14 +352,31 @@ class MainDialog extends soui4.JsHostWnd{
 		let stackApi = soui4.QiIStackView(stack_board);
 		let id = e.Sender().GetID();
 		stackApi.SelectView(id-200,true);
-		this.board[id-200].reset();
 		stackApi.Release();
 		this.mode = id-200;
+		this.onReset();
+	}
+
+	onReset(){
+		let bi = boardInfo[this.mode];
+		this.board.reset(bi.rows,bi.cols,bi.mines);
+		//todo rest ui
+		let board = this.FindIChildByName(boardName[this.mode]);
+		for(let y=0;y<bi.rows;y++){
+			for(let x=0;x<bi.cols;x++){
+				//*
+				let gridStack = board.FindIChildByID(base_id+this.board.cord2index(x,y));
+				let stackApi = soui4.QiIStackView(gridStack);
+				stackApi.SelectView(0,false);
+				stackApi.Release();
+				//*/
+			}
+		}
 	}
 
 	buildBoard(mode){
-		let rows = boardInfo[mode][0];
-		let cols =boardInfo[mode][1];
+		let rows = boardInfo[mode].rows
+		let cols =boardInfo[mode].cols;
 		let grids = rows * cols;
 
 		let head="<t:g.mine>";
@@ -367,7 +386,7 @@ class MainDialog extends soui4.JsHostWnd{
 		for(let i=0;i<grids;i++){
 			let y = Math.floor(i / cols);
 			let x = i%cols;
-			let ele = "<data id=\""+(base_id+i)+"\" data=\""+(base_id+i)+"\"" +" text=\"" + this.board[mode].getRoundMines(x,y)+"\"" +"/>";
+			let ele = "<data id=\""+(base_id+i)+"\" data=\""+(base_id+i)+"\"" +"/>";
 			xml += head+ele+tail;
 		}
 		return xml;
@@ -375,23 +394,15 @@ class MainDialog extends soui4.JsHostWnd{
 
 	init(){
 		console.log("init");
+		soui4.SConnect(this.FindIChildByName("chk_enable_ques"),soui4.EVT_CMD,this,this.onEnableQuestion);
 		soui4.SConnect(this.FindIChildByID(200),soui4.EVT_CMD,this,this.onOptBtn);
 		soui4.SConnect(this.FindIChildByID(201),soui4.EVT_CMD,this,this.onOptBtn);
 		soui4.SConnect(this.FindIChildByID(202),soui4.EVT_CMD,this,this.onOptBtn);
-		{
-			let board = this.FindIChildByName("board_easy");
-			board.CreateChildrenFromXml(this.buildBoard(0));	
+		for(let i=0;i<3;i++){
+			let board = this.FindIChildByName(boardName[i]);
+			board.CreateChildrenFromXml(this.buildBoard(i));	
 		}
-		{
-			let board = this.FindIChildByName("board_middle");
-			board.CreateChildrenFromXml(this.buildBoard(1));	
-		}
-		{
-			let board = this.FindIChildByName("board_hard");
-			board.CreateChildrenFromXml(this.buildBoard(2));	
-		}
-
-		soui4.SConnect(this.FindIChildByName("chk_enable_ques"),soui4.EVT_CMD,this,this.onEnableQuestion);
+		this.onReset();
 	}
 
 	uninit(){
