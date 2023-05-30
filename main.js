@@ -114,7 +114,31 @@ class MineBoard{
 		}
 	}
 
+	collectInitNeighbours(x,y){
+		let ret=[];
+		let x1=x-1;
+		let x2=x+1;
+		let y1=y-1;
+		let y2=y+1;
+		x1 = Math.max(x1,0);
+		x2 = Math.min(x2,this.cols-1);
+		y1 = Math.max(y1,0);
+		y2 = Math.min(y2,this.rows-1);
+
+		for(let i=y1;i<=y2;i++){
+			for(let j=x1;j<=x2;j++){
+				if(i==y && j==x)
+					continue;
+				if(this.board[i][j].state == Status.init)
+					ret.push({x:j,y:i});
+			}
+		}
+		return ret;
+	}
+
 	autoExplore(x,y){
+		if(this.board[y][x].state!=Status.nomine)
+			return;
 		let mines = this.getRoundMines(x,y);
 		let x1=x-1;
 		let x2=x+1;
@@ -171,11 +195,12 @@ class MainDialog extends soui4.JsHostWnd{
 		this.mode = 0;
 		this.enableQuestion=true;
 		this.clickGrid={x:-1,y:-1};
+		this.bothClick = false;
 	}
 
 	onSetGridState(mode,x,y,state){
 		//update state
-		console.log("onSetGridState",mode,y,x,state);
+		//console.log("onSetGridState",mode,y,x,state);
 		const board_names=["board_easy","board_middle","board_hard"];
 		let board = this.FindIChildByName(board_names[this.mode]);
 		let idx = this.getCurBoard().cord2index(x,y);
@@ -211,8 +236,8 @@ class MainDialog extends soui4.JsHostWnd{
 				let flags = evt.uFlags;
 				if((clickId==soui4.MOUSE_LBTN_DOWN && (flags&soui4.MK_RBUTTON))
 				||(clickId==soui4.MOUSE_RBTN_DOWN && (flags&soui4.MK_LBUTTON))){
+					this.bothClick = true;
 					this.onBothClick(cord.x,cord.y);
-					this.clickGrid.x=-1;
 				}else if(clickId == soui4.MOUSE_LBTN_DOWN)
 				{
 					this.clickGrid = cord;
@@ -221,11 +246,21 @@ class MainDialog extends soui4.JsHostWnd{
 				}
 				else if(clickId == soui4.MOUSE_LBTN_UP)
 				{
-					if(cord.x == this.clickGrid.x && cord.y == this.clickGrid.y && evt.bHover)
+					if(this.bothClick){
+						this.clickGrid.x = -1;
+						this.onBothRelease(cord.x,cord.y);
+						this.bothClick=false;
+					}
+					else if(cord.x == this.clickGrid.x && cord.y == this.clickGrid.y && evt.bHover)
 						this.onClickGrid(cord.x,cord.y);
 				}	
 				else if(clickId == soui4.MOUSE_RBTN_UP){
-					if(cord.x == this.clickGrid.x && cord.y == this.clickGrid.y && evt.bHover)
+					if(this.bothClick){
+						this.clickGrid.x = -1;
+						this.onBothRelease(cord.x,cord.y);
+						this.bothClick=false;
+					}
+					else if(cord.x == this.clickGrid.x && cord.y == this.clickGrid.y && evt.bHover)
 						this.onRclickGrid(cord.x,cord.y);
 				}
 			}
@@ -233,9 +268,25 @@ class MainDialog extends soui4.JsHostWnd{
 		return false;
 	}
 	
+	onBothRelease(x,y){
+		console.log("onBothRelease",y,x);
+		let neighbours = this.getCurBoard().collectInitNeighbours(x,y);
+		for(let i=0;i<neighbours.length;i++){
+			let idx = this.getCurBoard().cord2index(neighbours[i].x,neighbours[i].y);
+			this.FindIChildByID(base_id+idx).FindIChildByID(base_id+idx).SetCheck(false);
+		}
+		this.getCurBoard().autoExplore(x,y);
+	}
+
 	onBothClick(x,y){
 		console.log("onBothClick",y,x);
-		this.getCurBoard().autoExplore(x,y);
+		let neighbours = this.getCurBoard().collectInitNeighbours(x,y);
+		for(let i=0;i<neighbours.length;i++){
+			let idx = this.getCurBoard().cord2index(neighbours[i].x,neighbours[i].y);
+			let gridStack = this.FindIChildByID(base_id+idx);
+			let gridBtn = gridStack.FindIChildByID(base_id+idx);
+			gridBtn.SetCheck(true);
+		}
 	}
 
 	onClickGrid(x,y){
