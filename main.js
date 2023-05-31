@@ -1,5 +1,7 @@
 ﻿import * as soui4 from "soui4";
 import * as std from "std";
+import * as os from "os";
+
 var g_workDir="";
 
 const Status ={
@@ -227,6 +229,8 @@ class MainDialog extends soui4.JsHostWnd{
 		this.enableQuestion=true;
 		this.clickGrid={x:-1,y:-1};
 		this.bothClick = false;
+		this.timer = null;
+		this.time_cost = 0;
 	}
 
 	onResult(bSucceed){
@@ -236,6 +240,7 @@ class MainDialog extends soui4.JsHostWnd{
 		let stackApi = soui4.QiIStackView(stack_result);
 		stackApi.SelectView(bSucceed?0:1,true);
 		stackApi.Release();
+		this.endTick();
 	}
 
 	onSetGridState(mode,x,y,state){
@@ -313,8 +318,30 @@ class MainDialog extends soui4.JsHostWnd{
 		this.board.autoExplore(x,y);
 	}
 
+	onTick(){
+		console.log("onTick");
+		this.time_cost++;
+		let wnd_time = this.FindIChildByName("txt_time_cost");
+		wnd_time.SetWindowText(""+this.time_cost);
+		this.timer = os.setTimeout(this.onTick, 1000,this);
+	}
+
+	checkTick(){
+		if(this.timer!=null)
+			return;
+		this.time_cost = 0;
+		this.timer = os.setTimeout(this.onTick, 1000,this);
+	}
+
+	endTick(){
+		if(this.timer!=null){
+			os.clearTimeout(this.timer);
+			this.timer = null;
+		}
+	}
 	onBothClick(x,y){
 		console.log("onBothClick",y,x);
+		this.checkTick();
 		let neighbours = this.board.collectInitNeighbours(x,y);
 		for(let i=0;i<neighbours.length;i++){
 			let idx = this.board.cord2index(neighbours[i].x,neighbours[i].y);
@@ -328,6 +355,7 @@ class MainDialog extends soui4.JsHostWnd{
 		if(this.board.getState(x,y)!=Status.init)
 			return;
 		console.log("onClickGrid",y,x);
+		this.checkTick();
 		this.board.setMine(x,y,false);
 	}
 	
@@ -336,6 +364,7 @@ class MainDialog extends soui4.JsHostWnd{
 		if(stat==Status.nomine)
 			return;
 		console.log("onRclickGrid",y,x);
+		this.checkTick();
 		if(stat == Status.init)
 			this.board.setMine(x,y,true);
 		else {
@@ -381,8 +410,8 @@ class MainDialog extends soui4.JsHostWnd{
 		}
 		let txt_mine=this.FindIChildByName("txt_mine");
 		txt_mine.SetWindowText(""+this.board.getRemain());
-		let txt_timer = this.FindIChildByName("txt_timer");
-		txt_timer.SetWindowText("0");
+		let txt_time = this.FindIChildByName("txt_time_cost");
+		txt_time.SetWindowText("0");
 	}
 
 	buildBoard(mode){
@@ -425,6 +454,8 @@ class MainDialog extends soui4.JsHostWnd{
 
 	uninit(){
 		//do uninit.
+		//note: must check the timer and stop it if existed.
+		this.endTick();
 		console.log("uninit");
 	}
 };

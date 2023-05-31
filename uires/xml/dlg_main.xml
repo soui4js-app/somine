@@ -30,7 +30,7 @@ translucent="1"
 			<text size="50,-2" name="txt_mine" text="0"/>
 			<img skin="icon_timer"/>
 			<text text=":"/>
-			<text size="50,-2" name="txt_timer" text="0"/>
+			<text size="50,-2" name="txt_time_cost" text="0"/>
 			<button name="btn_reset" name="btn_reset" size="80,30" text="Reset"/>
 			<window size="0,0" weight="1"/>
 		</window> 
