@@ -35,7 +35,7 @@ translucent="1"
 					<animateimg pos="|0,|0" offset="-0.5,-0.5" skin="skin_win" autoStart="1"/>
 				</window>
 				<window name="wnd_fail">
-					<text pos="|0,|0" offset="-0.5,-0.5" text="you failed!" colorText="@color/red"/>
+					<animateimg pos="|0,|0" offset="-0.5,-0.5" skin="skin_fail" autoStart="1"/>
 				</window>
 			</stack>
 		</window>

@@ -22,5 +22,6 @@
     <file name="tile_mine"  path="image\tile_mine.png"/>
     <file name="tile_flag_wrong"  path="image\tile_flag_wrong.png"/>
     <file name="png_win"  path="image\win.png"/>
+    <file name="png_fail"  path="image\fail.png"/>
   </img>
 </resource>
