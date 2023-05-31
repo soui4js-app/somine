@@ -9,4 +9,5 @@
     <imglist name="skin_fail" src="img:png_fail" states="15"/>
     <imglist name="icon_timer" src="img:icon_timer"/>
     <imglist name="icon_mine" src="img:icon_mine"/>
+    <imglist name="tile_hide" src="img:tile_hide" states="3"/>
 </skin>

@@ -16,6 +16,7 @@
     <file name="ICON_LOGO"  path="image\soui.ico"/>
   </ICON>
   <img>
+    <file name="tile_hide"  path="image\tile_hide.png"/>
     <file name="tile_num"  path="image\tile_num.png"/>
     <file name="tile_ques"  path="image\tile_ques.png"/>
     <file name="tile_flag"  path="image\tile_flag.png"/>
