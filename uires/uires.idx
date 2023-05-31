@@ -23,5 +23,7 @@
     <file name="tile_flag_wrong"  path="image\tile_flag_wrong.png"/>
     <file name="png_win"  path="image\win.png"/>
     <file name="png_fail"  path="image\fail.png"/>
+    <file name="icon_timer"  path="image\icon-timer.png"/>
+    <file name="icon_mine"  path="image\icon-mine.png"/>
   </img>
 </resource>

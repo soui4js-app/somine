@@ -7,4 +7,6 @@
     <imglist name="tile_mine" src="img:tile_mine"/>
     <imglist name="skin_win" src="img:png_win" states="26"/>
     <imglist name="skin_fail" src="img:png_fail" states="15"/>
+    <imglist name="icon_timer" src="img:icon_timer"/>
+    <imglist name="icon_mine" src="img:icon_mine"/>
 </skin>

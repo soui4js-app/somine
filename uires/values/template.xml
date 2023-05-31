@@ -13,9 +13,9 @@
     };
     -->
       <button name="page_btn" id="{{id}}"/>
-      <animateimg name="page_flag" skin="tile_flag" msgTransparent="1"/>
+      <animateimg name="page_flag" skin="tile_flag" msgTransparent="1" speed="100"/>
       <img name="page_flag_wrong" skin="tile_flag_wrong" msgTransparent="1"/>
-      <animateimg name="page_ques" skin="tile_ques" msgTransparent="1"/>
+      <animateimg name="page_ques" skin="tile_ques" msgTransparent="1" speed="100"/>
       <img name="page_mine" skin="tile_mine" msgTransparent="1"/>
       <img name="page_num" skin="tile_num" msgTransparent="1"/>
     </stack>

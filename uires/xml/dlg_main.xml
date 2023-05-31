@@ -21,21 +21,31 @@ translucent="1"
 			<radio name="opt_middle" id="201" text="Middle"/>
 			<radio name="opt_hard" id="202" text="Hard"/>
 			<window size="0,0" weight="1"/>
-			<button name="btn_reset" name="btn_reset" size="30,30" text="Re"/>
 			<check name="chk_enable_ques" text="enable question" checked="1"/>
 		</window>
+		<window size="-2,49" layout="hbox" interval="2" gravity="center">
+			<window size="0,0" weight="1"/>
+			<img skin="icon_mine"/>
+			<text text=":"/>
+			<text size="50,-2" name="txt_mine" text="0"/>
+			<img skin="icon_timer"/>
+			<text text=":"/>
+			<text size="50,-2" name="txt_timer" text="0"/>
+			<button name="btn_reset" name="btn_reset" size="80,30" text="Reset"/>
+			<window size="0,0" weight="1"/>
+		</window> 
 		<window size="-2,0" weight="1">
 			<stack pos="0,0,-0,-0" name="stack_board" curSel="0" aniType="push">
-				<window name="board_easy" colorBkgnd="@color/red" layout="gridlayout" columnCount="9" interval="1" gravity="fill"/>
-				<window name="board_middle" colorBkgnd="@color/red" layout="gridlayout" columnCount="16" interval="1" gravity="fill"/>
-				<window name="board_hard" colorBkgnd="@color/red" layout="gridlayout" columnCount="30" interval="1" gravity="fill"/>
+				<window name="board_easy" layout="gridlayout" columnCount="9" interval="1" gravity="fill"/>
+				<window name="board_middle" layout="gridlayout" columnCount="16" interval="1" gravity="fill"/>
+				<window name="board_hard" layout="gridlayout" columnCount="30" interval="1" gravity="fill"/>
 			</stack>
 			<stack pos="0,0,-0,-0" name="stack_result" visible="0" curSel="-1">
 				<window name="wnd_win">
-					<animateimg pos="|0,|0" offset="-0.5,-0.5" skin="skin_win" autoStart="1"/>
+					<animateimg pos="|0,|0" offset="-0.5,-0.5" skin="skin_win" autoStart="1" speed="100"/>
 				</window>
 				<window name="wnd_fail">
-					<animateimg pos="|0,|0" offset="-0.5,-0.5" skin="skin_fail" autoStart="1"/>
+					<animateimg pos="|0,|0" offset="-0.5,-0.5" skin="skin_fail" autoStart="1" speed="100" repeat="1"/>
 				</window>
 			</stack>
 		</window>

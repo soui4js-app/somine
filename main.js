@@ -30,6 +30,7 @@ class MineBoard{
 	
 	reset(rows,cols,mines){
 		this.opened = 0;
+		this.flags = 0;
 		this.board = [];
 		this.rows = rows;
 		this.cols = cols;
@@ -61,6 +62,10 @@ class MineBoard{
 			}
 		}
 		
+	}
+
+	getRemain(){
+		return this.mines-this.flags;
 	}
 
 	index2cord(idx){
@@ -103,22 +108,29 @@ class MineBoard{
 	}
 
 	setState(x,y,state){
-		this.board[y][x].state = state;//set to question
+		if(this.getState(x,y)==state)
+			return;
+		if(this.getState(x,y)==Status.flag_mine)
+			this.flags--;
+		else if(state == Status.flag_mine)
+			this.flags++;
+		this.board[y][x].state = state;
+		if(state==Status.nomine){
+			this.opened++;
+		}
 		this.mainDlg.onSetGridState(this.mode,x,y,state);
 	}
 
 	setMine(x,y,isMine){
 		if(this.getState(x,y)!=Status.init)
 			return true;
-		this.board[y][x].state = isMine?Status.flag_mine:Status.nomine; //guess is as mine
+		let state = isMine?Status.flag_mine:Status.nomine;
 		if(this.board[y][x].mine && !isMine)
 		{
-			this.board[y][x].state = Status.mine;
-		}else if(this.getState(x,y)==Status.nomine){
-			this.opened++;
-		}	
-		this.mainDlg.onSetGridState(this.mode,x,y,this.board[y][x].state);
-		if(this.board[y][x].state == Status.mine){
+			state = Status.mine;
+		}
+		this.setState(x,y,state);
+		if(state == Status.mine){
 			//failed!
 			this.mainDlg.onResult(false);
 			return false;
@@ -128,11 +140,10 @@ class MineBoard{
 			this.mainDlg.onResult(true);
 			return false;
 		}
-		if(!this.board[y][x].mine && !isMine){
-			return this.autoExplore(x,y);
-		}else{
-			return this.board[y][x].state != Status.mine;
+		if(!isMine){
+			this.autoExplore(x,y);
 		}
+		return true;
 	}
 
 	collectInitNeighbours(x,y){
@@ -241,6 +252,8 @@ class MainDialog extends soui4.JsHostWnd{
 			imgApi.Release();
 		}
 		stackApi.Release();
+		let txt_mine = this.FindIChildByName("txt_mine");
+		txt_mine.SetWindowText(""+this.board.getRemain());
 	}
 
 	getCurBoard(){
@@ -364,14 +377,16 @@ class MainDialog extends soui4.JsHostWnd{
 		let board = this.FindIChildByName(boardName[this.mode]);
 		for(let y=0;y<bi.rows;y++){
 			for(let x=0;x<bi.cols;x++){
-				//*
 				let gridStack = board.FindIChildByID(base_id+this.board.cord2index(x,y));
 				let stackApi = soui4.QiIStackView(gridStack);
 				stackApi.SelectView(0,false);
 				stackApi.Release();
-				//*/
 			}
 		}
+		let txt_mine=this.FindIChildByName("txt_mine");
+		txt_mine.SetWindowText(""+this.board.getRemain());
+		let txt_timer = this.FindIChildByName("txt_timer");
+		txt_timer.SetWindowText("0");
 	}
 
 	buildBoard(mode){
