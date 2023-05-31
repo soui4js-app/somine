@@ -26,9 +26,9 @@ translucent="1"
 		</window>
 		<window size="-2,0" weight="1">
 			<stack pos="0,0,-0,-0" name="stack_board" curSel="0" aniType="push">
-				<window name="board_easy" colorBkgnd="@color/red" layout="gridlayout" columnCount="9" interval="2" gravity="fill"/>
-				<window name="board_middle" colorBkgnd="@color/blue" layout="gridlayout" columnCount="16" interval="2" gravity="fill"/>
-				<window name="board_hard" colorBkgnd="@color/green" layout="gridlayout" columnCount="30" interval="2" gravity="fill"/>
+				<window name="board_easy" colorBkgnd="@color/red" layout="gridlayout" columnCount="9" interval="1" gravity="fill"/>
+				<window name="board_middle" colorBkgnd="@color/red" layout="gridlayout" columnCount="16" interval="1" gravity="fill"/>
+				<window name="board_hard" colorBkgnd="@color/red" layout="gridlayout" columnCount="30" interval="1" gravity="fill"/>
 			</stack>
 			<stack pos="0,0,-0,-0" name="stack_result" visible="0" curSel="-1">
 				<window name="wnd_win">

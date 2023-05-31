@@ -354,7 +354,7 @@ class MainDialog extends soui4.JsHostWnd{
 		stackApi.SelectView(id-200,true);
 		stackApi.Release();
 		this.mode = id-200;
-		this.onReset();
+		this.onBtnReset(e);
 	}
 
 	onReset(){
