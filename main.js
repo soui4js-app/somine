@@ -307,19 +307,8 @@ class MainDialog extends soui4.JsHostWnd{
 		}
 		return false;
 	}
-	
-	onBothRelease(x,y){
-		console.log("onBothRelease",y,x);
-		let neighbours = this.board.collectInitNeighbours(x,y);
-		for(let i=0;i<neighbours.length;i++){
-			let idx = this.board.cord2index(neighbours[i].x,neighbours[i].y);
-			this.FindIChildByID(base_id+idx).FindIChildByID(base_id+idx).SetCheck(false);
-		}
-		this.board.autoExplore(x,y);
-	}
 
 	onTick(){
-		console.log("onTick");
 		this.time_cost++;
 		let wnd_time = this.FindIChildByName("txt_time_cost");
 		wnd_time.SetWindowText(""+this.time_cost);
@@ -339,15 +328,26 @@ class MainDialog extends soui4.JsHostWnd{
 			this.timer = null;
 		}
 	}
+
+	onBothRelease(x,y){
+		console.log("onBothRelease",y,x);
+		let neighbours = this.board.collectInitNeighbours(x,y);
+		let board = this.FindIChildByName(boardName[this.mode]);
+		for(let i=0;i<neighbours.length;i++){
+			let idx = this.board.cord2index(neighbours[i].x,neighbours[i].y);
+			board.FindIChildByID(base_id+idx).FindIChildByID(base_id+idx).SetCheck(false);
+		}
+		this.board.autoExplore(x,y);
+	}
+
 	onBothClick(x,y){
 		console.log("onBothClick",y,x);
 		this.checkTick();
 		let neighbours = this.board.collectInitNeighbours(x,y);
+		let board = this.FindIChildByName(boardName[this.mode]);//
 		for(let i=0;i<neighbours.length;i++){
 			let idx = this.board.cord2index(neighbours[i].x,neighbours[i].y);
-			let gridStack = this.FindIChildByID(base_id+idx);
-			let gridBtn = gridStack.FindIChildByID(base_id+idx);
-			gridBtn.SetCheck(true);
+			board.FindIChildByID(base_id+idx).FindIChildByID(base_id+idx).SetCheck(true);
 		}
 	}
 
