@@ -5,4 +5,5 @@
     <imglist name="tile_flag" src="img:tile_flag" states="3"/>
     <imglist name="tile_flag_wrong" src="img:tile_flag_wrong"/>
     <imglist name="tile_mine" src="img:tile_mine"/>
+    <imglist name="skin_win" src="img:png_win" states="26"/>
 </skin>

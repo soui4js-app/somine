@@ -220,11 +220,11 @@ class MainDialog extends soui4.JsHostWnd{
 
 	onResult(bSucceed){
 		console.log("game over");
-		if(bSucceed){
-			soui4.SMessageBox(this.GetHwnd(),"you win!","game over",soui4.MB_OK);
-		}else{
-			soui4.SMessageBox(this.GetHwnd(),"better lucky next time!","game over",soui4.MB_OK);
-		}
+		let stack_result = this.FindIChildByName("stack_result");
+		stack_result.SetVisible(true,true);
+		let stackApi = soui4.QiIStackView(stack_result);
+		stackApi.SelectView(bSucceed?0:1,true);
+		stackApi.Release();
 	}
 
 	onSetGridState(mode,x,y,state){
@@ -392,12 +392,19 @@ class MainDialog extends soui4.JsHostWnd{
 		return xml;
 	}
 
+	onBtnReset(e){
+		this.onReset();
+		let stack_result = this.FindIChildByName("stack_result");
+		stack_result.SetVisible(false,true);
+	}
+
 	init(){
 		console.log("init");
 		soui4.SConnect(this.FindIChildByName("chk_enable_ques"),soui4.EVT_CMD,this,this.onEnableQuestion);
 		soui4.SConnect(this.FindIChildByID(200),soui4.EVT_CMD,this,this.onOptBtn);
 		soui4.SConnect(this.FindIChildByID(201),soui4.EVT_CMD,this,this.onOptBtn);
 		soui4.SConnect(this.FindIChildByID(202),soui4.EVT_CMD,this,this.onOptBtn);
+		soui4.SConnect(this.FindIChildByName("btn_reset"),soui4.EVT_CMD,this,this.onBtnReset);
 		for(let i=0;i<3;i++){
 			let board = this.FindIChildByName(boardName[i]);
 			board.CreateChildrenFromXml(this.buildBoard(i));	
