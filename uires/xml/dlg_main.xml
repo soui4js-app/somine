@@ -2,7 +2,7 @@
 <SOUI name="mainWindow" title="@string/title" bigIcon="ICON_LOGO:32" smallIcon="ICON_LOGO:16" margin="5,5,5,5"  resizable="1" wndType="appMain"
 translucent="1"
 >
-  <root skin="_skin.sys.wnd.bkgnd" cache="1"  width="400" height="400" layout="vbox">
+  <root skin="_skin.sys.wnd.bkgnd" cache="1"  width="-1" height="-1" layout="vbox">
     <caption size="-2,30" layout="hbox" gravity="center">
 		<icon src="ICON_LOGO:16"/>
 		<text>@string/title</text>
@@ -14,7 +14,7 @@ translucent="1"
 		</window>
       	<imgbtn id="sysid_close" skin="_skin.sys.btn.close"    pos="-45,0" tip="close" animate="1"/>
     </caption>
-    <window size="-2,0" weight="1" padding="5" layout="vbox">
+    <window size="-1,-1" padding="5" layout="vbox">
 		<window size="-2,30" layout="hbox" interval="10" gravity="center">
 			<window size="0,0" weight="1"/>
 			<radio name="opt_easy" id="200" text="Easy" checked="1"/>
@@ -34,13 +34,9 @@ translucent="1"
 			<button name="btn_reset" name="btn_reset" size="80,30" text="Reset"/>
 			<window size="0,0" weight="1"/>
 		</window> 
-		<window size="-2,0" weight="1">
-			<stack pos="0,0,-0,-0" name="stack_board" curSel="0" aniType="push">
-				<window name="board_easy" layout="gridlayout" columnCount="9" interval="0" gravity="fill"/>
-				<window name="board_middle" layout="gridlayout" columnCount="16" interval="0" gravity="fill"/>
-				<window name="board_hard" layout="gridlayout" columnCount="30" interval="0" gravity="fill"/>
-			</stack>
-			<stack pos="0,0,-0,-0" name="stack_result" visible="0" curSel="-1">
+		<window size="-1,-1">
+			<window pos="0,0" size="-1,-1" name="wnd_board" layout="gridlayout" interval="0" gravity="fill"/>
+			<stack pos="0,0,-0,-0"  name="stack_result" visible="0" curSel="-1">
 				<window name="wnd_win">
 					<animateimg pos="|0,|0" offset="-0.5,-0.5" skin="skin_win" autoStart="1" speed="100"/>
 				</window>

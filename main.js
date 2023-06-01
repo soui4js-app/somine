@@ -244,7 +244,7 @@ class MainDialog extends soui4.JsHostWnd{
 	}
 
 	onSetGridState(mode,x,y,state){
-		let board = this.FindIChildByName(boardName[this.mode]);
+		let board = this.FindIChildByName("wnd_board");
 		let idx = this.board.cord2index(x,y);
 		let grid = board.FindIChildByID(base_id+idx);
 		let stackApi = soui4.QiIStackView(grid);
@@ -332,7 +332,7 @@ class MainDialog extends soui4.JsHostWnd{
 	onBothRelease(x,y){
 		console.log("onBothRelease",y,x);
 		let neighbours = this.board.collectInitNeighbours(x,y);
-		let board = this.FindIChildByName(boardName[this.mode]);
+		let board = this.FindIChildByName("wnd_board");
 		for(let i=0;i<neighbours.length;i++){
 			let idx = this.board.cord2index(neighbours[i].x,neighbours[i].y);
 			board.FindIChildByID(base_id+idx).FindIChildByID(base_id+idx).SetCheck(false);
@@ -344,7 +344,7 @@ class MainDialog extends soui4.JsHostWnd{
 		console.log("onBothClick",y,x);
 		this.checkTick();
 		let neighbours = this.board.collectInitNeighbours(x,y);
-		let board = this.FindIChildByName(boardName[this.mode]);//
+		let board = this.FindIChildByName("wnd_board");
 		for(let i=0;i<neighbours.length;i++){
 			let idx = this.board.cord2index(neighbours[i].x,neighbours[i].y);
 			board.FindIChildByID(base_id+idx).FindIChildByID(base_id+idx).SetCheck(true);
@@ -386,34 +386,12 @@ class MainDialog extends soui4.JsHostWnd{
 	}
 
 	onOptBtn(e){
-		let stack_board = this.FindIChildByName("stack_board");
-		let stackApi = soui4.QiIStackView(stack_board);
 		let id = e.Sender().GetID();
-		stackApi.SelectView(id-200,true);
-		stackApi.Release();
-		this.mode = id-200;
+		this.onInitBoard(id-200);
 		this.onBtnReset(e);
 	}
 
-	onReset(){
-		let bi = boardInfo[this.mode];
-		this.board.reset(bi.rows,bi.cols,bi.mines);
-		//todo rest ui
-		let board = this.FindIChildByName(boardName[this.mode]);
-		for(let y=0;y<bi.rows;y++){
-			for(let x=0;x<bi.cols;x++){
-				let gridStack = board.FindIChildByID(base_id+this.board.cord2index(x,y));
-				let stackApi = soui4.QiIStackView(gridStack);
-				stackApi.SelectView(0,false);
-				stackApi.Release();
-			}
-		}
-		let txt_mine=this.FindIChildByName("txt_mine");
-		txt_mine.SetWindowText(""+this.board.getRemain());
-		let txt_time = this.FindIChildByName("txt_time_cost");
-		txt_time.SetWindowText("0");
-	}
-
+	
 	buildBoard(mode){
 		let rows = boardInfo[mode].rows
 		let cols =boardInfo[mode].cols;
@@ -432,6 +410,33 @@ class MainDialog extends soui4.JsHostWnd{
 		return xml;
 	}
 
+	onInitBoard(mode){
+		this.mode = mode;
+		let board = this.FindIChildByName("wnd_board");
+		board.DestroyAllChildren();
+		board.SetAttribute("columnCount",""+boardInfo[mode].cols,false);
+		board.CreateChildrenFromXml(this.buildBoard(mode));
+		board.RequestRelayout();
+	}
+
+	onReset(){
+		let bi = boardInfo[this.mode];
+		this.board.reset(bi.rows,bi.cols,bi.mines);
+		let board = this.FindIChildByName("wnd_board");
+		for(let y=0;y<bi.rows;y++){
+			for(let x=0;x<bi.cols;x++){
+				let gridStack = board.FindIChildByID(base_id+this.board.cord2index(x,y));
+				let stackApi = soui4.QiIStackView(gridStack);
+				stackApi.SelectView(0,false);
+				stackApi.Release();
+			}
+		}
+		let txt_mine=this.FindIChildByName("txt_mine");
+		txt_mine.SetWindowText(""+this.board.getRemain());
+		let txt_time = this.FindIChildByName("txt_time_cost");
+		txt_time.SetWindowText("0");
+	}
+
 	onBtnReset(e){
 		this.onReset();
 		let stack_result = this.FindIChildByName("stack_result");
@@ -445,10 +450,7 @@ class MainDialog extends soui4.JsHostWnd{
 		soui4.SConnect(this.FindIChildByID(201),soui4.EVT_CMD,this,this.onOptBtn);
 		soui4.SConnect(this.FindIChildByID(202),soui4.EVT_CMD,this,this.onOptBtn);
 		soui4.SConnect(this.FindIChildByName("btn_reset"),soui4.EVT_CMD,this,this.onBtnReset);
-		for(let i=0;i<3;i++){
-			let board = this.FindIChildByName(boardName[i]);
-			board.CreateChildrenFromXml(this.buildBoard(i));	
-		}
+		this.onInitBoard(Mode.easy);
 		this.onReset();
 	}
 

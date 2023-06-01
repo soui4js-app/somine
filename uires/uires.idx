@@ -16,15 +16,24 @@
     <file name="ICON_LOGO"  path="image\soui.ico"/>
   </ICON>
   <img>
-    <file name="tile_hide"  path="image\tile_hide.png"/>
-    <file name="tile_num"  path="image\tile_num.png"/>
-    <file name="tile_ques"  path="image\tile_ques.png"/>
-    <file name="tile_flag"  path="image\tile_flag.png"/>
-    <file name="tile_mine"  path="image\tile_mine.png"/>
-    <file name="tile_flag_wrong"  path="image\tile_flag_wrong.png"/>
+    <file name="tile_hide"  path="image\100\tile_hide.png"/>
+    <file name="tile_num"  path="image\100\tile_num.png"/>
+    <file name="tile_ques"  path="image\100\tile_ques.png"/>
+    <file name="tile_flag"  path="image\100\tile_flag.png"/>
+    <file name="tile_mine"  path="image\100\tile_mine.png"/>
+    <file name="tile_flag_wrong"  path="image\100\tile_flag_wrong.png"/>
+    
+    <file name="tile_hide#2"  path="image\200\tile_hide.png"/>
+    <file name="tile_num#2"  path="image\200\tile_num.png"/>
+    <file name="tile_ques#2"  path="image\200\tile_ques.png"/>
+    <file name="tile_flag#2"  path="image\200\tile_flag.png"/>
+    <file name="tile_mine#2"  path="image\200\tile_mine.png"/>
+    <file name="tile_flag_wrong#2"  path="image\200\tile_flag_wrong.png"/>
+        
     <file name="png_win"  path="image\win.png"/>
     <file name="png_fail"  path="image\fail.png"/>
     <file name="icon_timer"  path="image\icon-timer.png"/>
     <file name="icon_mine"  path="image\icon-mine.png"/>
+    <file name="img_congratulations" path="image\congratulations.png"/>
   </img>
 </resource>
