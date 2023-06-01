@@ -33,7 +33,7 @@ translucent="1"
 		<window size="-1,-1">
 			<window pos="0,0" size="-1,-1" name="wnd_board" layout="gridlayout" interval="0" gravity="fill"/>
 			<stack pos="0,0,-0,-0"  name="stack_result" visible="0" curSel="-1">
-				<window name="wnd_win" layout="vbox" gravity="center" show="0">
+				<window name="wnd_win" layout="vbox" gravity="center">
 					<img skin="img_congratulations"/>
 					<animateimg skin="skin_win" autoStart="1" speed="100"/>
 				</window>

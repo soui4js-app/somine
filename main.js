@@ -386,6 +386,8 @@ class MainDialog extends soui4.JsHostWnd{
 	onOptBtn(e){
 		let id = e.Sender().GetID();
 		this.onInitBoard(id-200);
+		this.GetIRoot().Update();
+		this.CenterWindow(0);
 		this.onBtnReset(e);
 	}
 
