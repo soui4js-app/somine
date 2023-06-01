@@ -16,11 +16,9 @@ const Status ={
 //定义一个全局的信息
 const boardInfo = [
 	{rows:9,cols:9,mines:9},
-	{rows:16,cols:16,mines:20},
+	{rows:16,cols:16,mines:40},
 	{rows:16,cols:30,mines:99}
 ];
-
-const boardName=["board_easy","board_middle","board_hard"];
 
 const base_id=1000;
 

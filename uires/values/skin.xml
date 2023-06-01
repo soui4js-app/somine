@@ -19,4 +19,5 @@
     <imglist name="icon_timer" src="img:icon_timer"/>
     <imglist name="icon_mine" src="img:icon_mine"/>
    <imglist name="img_congratulations" src="img:img_congratulations"/>
+   <imglist name="img_better_luck" src="img:img_better_luck"/>
 </skin>
