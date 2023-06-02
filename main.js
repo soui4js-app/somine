@@ -452,6 +452,8 @@ class MainDialog extends soui4.JsHostWnd{
 		soui4.SConnect(this.FindIChildByName("btn_reset"),soui4.EVT_CMD,this,this.onBtnReset);
 		this.onInitBoard(Mode.easy);
 		this.onReset();
+		this.GetIRoot().Update();
+		this.CenterWindow(0);
 	}
 
 	uninit(){

@@ -13,11 +13,11 @@ translucent="1"
     <window size="-1,-1" padding="5" layout="vbox">
 		<window size="-2,30" layout="hbox" interval="10" gravity="center">
 			<window size="0,0" weight="1"/>
-			<radio name="opt_easy" id="200" text="Easy" checked="1"/>
-			<radio name="opt_middle" id="201" text="Middle"/>
-			<radio name="opt_hard" id="202" text="Hard"/>
+			<radio name="opt_easy" id="200" text="基础" checked="1"/>
+			<radio name="opt_middle" id="201" text="中级"/>
+			<radio name="opt_hard" id="202" text="专家"/>
 			<window size="0,0" weight="1"/>
-			<check name="chk_enable_ques" text="enable question" checked="1"/>
+			<check name="chk_enable_ques" text="标记未知" checked="1"/>
 		</window>
 		<window size="-2,49" layout="hbox" interval="2" gravity="center">
 			<window size="0,0" weight="1"/>
@@ -27,7 +27,7 @@ translucent="1"
 			<img skin="icon_timer"/>
 			<text text=":"/>
 			<text size="50,-2" name="txt_time_cost" text="0"/>
-			<button name="btn_reset" name="btn_reset" size="80,30" text="Reset"/>
+			<button name="btn_reset" name="btn_reset" size="80,30" text="重来"/>
 			<window size="0,0" weight="1"/>
 		</window> 
 		<window size="-1,-1">
