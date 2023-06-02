@@ -1,6 +1,6 @@
 ﻿import * as soui4 from "soui4";
-import * as std from "std";
 import * as os from "os";
+import * as utils from "utils.dll";
 
 var g_workDir="";
 
@@ -239,6 +239,9 @@ class MainDialog extends soui4.JsHostWnd{
 		stackApi.SelectView(bSucceed?0:1,true);
 		stackApi.Release();
 		this.endTick();
+		let sound = g_workDir+"\\Sound\\";
+		sound += bSucceed?"win.wav":"lose.wav";
+		utils.PlaySound(sound,false);
 	}
 
 	onSetGridState(mode,x,y,state){
