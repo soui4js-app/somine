@@ -236,7 +236,7 @@ class MainDialog extends soui4.JsHostWnd{
 		let stack_result = this.FindIChildByName("stack_result");
 		stack_result.SetVisible(true,true);
 		let stackApi = soui4.QiIStackView(stack_result);
-		stackApi.SelectView(bSucceed?0:1,true);
+		stackApi.SelectPage(bSucceed?0:1,true);
 		stackApi.Release();
 		this.endTick();
 		let sound = g_workDir+"\\Sound\\";
@@ -249,7 +249,7 @@ class MainDialog extends soui4.JsHostWnd{
 		let idx = this.board.cord2index(x,y);
 		let grid = board.FindIChildByID(base_id+idx);
 		let stackApi = soui4.QiIStackView(grid);
-		stackApi.SelectView(state,true);
+		stackApi.SelectPage(state,true);
 		if(state == Status.nomine){
 			let img = grid.FindIChildByName("page_num");
 			let imgApi = soui4.QiIImageWnd(img);
@@ -430,7 +430,7 @@ class MainDialog extends soui4.JsHostWnd{
 			for(let x=0;x<bi.cols;x++){
 				let gridStack = board.FindIChildByID(base_id+this.board.cord2index(x,y));
 				let stackApi = soui4.QiIStackView(gridStack);
-				stackApi.SelectView(0,false);
+				stackApi.SelectPage(0,false);
 				stackApi.Release();
 			}
 		}
