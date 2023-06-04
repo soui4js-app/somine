@@ -1,23 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <template>
   <g.mine>
-    <stack id="{{id}}" clipClient="1" size="42,42" columnWeight1="1" rowWeight1="1" curSel="0">
-    <!--
+    <stack id="{{id}}" clipClient="1" size="-1,-1" curSel="-2">
+      <!--used for recv mouse event-->
+      <window id="{{id}}" size="-2,-2"/>
+      <!--used for show state-->
+      <stack name="stack_state" size="-1,-1" curSel="0" msgTransparent="1">
+      <!--
     const Status ={
-	init:0,		//init
-	flag_mine:1, //mark as mine
-	flag_wrong:2,//reveal wrong
-	flag_ques:3, //mark as question
-	mine:4,		 //explored
-	nomine:5,    //confirmed
+        init:0,		//init
+        flag_mine:1, //mark as mine
+        flag_wrong:2,//reveal wrong
+        flag_ques:3, //mark as question
+        exploded:4,	 //exploded
+        clear:5,     //clear
     };
     -->
-      <imgbtn name="page_btn" id="{{id}}" skin="tile_hide" hoverAware="0"/>
-      <img name="page_flag" skin="tile_flag" msgTransparent="1" speed="100"/>
-      <img name="page_flag_wrong" skin="tile_flag_wrong" msgTransparent="1"/>
-      <animateimg name="page_ques" skin="tile_ques" msgTransparent="1" speed="100"/>
-      <img name="page_mine" skin="tile_mine" msgTransparent="1"/>
-      <img name="page_num" skin="tile_num" msgTransparent="1"/>
+        <img  skin="tile_hide_normal"/>
+        <img size="-2,-2"  skin="tile_flag"  speed="100"/>
+        <img size="-2,-2"  skin="tile_flag_wrong"/>
+        <animateimg size="-2,-2" skin="tile_ques" speed="100"/>
+        <img size="-2,-2" skin="tile_mine"/>
+        <img size="-2,-2"  skin="tile_num"/>
+        <img size="-2,-2" skin="tile_hide_press" />
+      </stack>
     </stack>
   </g.mine>
 </template>

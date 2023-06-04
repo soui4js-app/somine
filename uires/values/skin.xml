@@ -6,6 +6,8 @@
     <imglist name="tile_flag_wrong" src="img:tile_flag_wrong"/>
     <imglist name="tile_mine" src="img:tile_mine"/>
     <imglist name="tile_hide" src="img:tile_hide" states="3"/>
+    <imglist name="tile_hide_normal" src="img:tile_hide_normal"/>
+    <imglist name="tile_hide_press" src="img:tile_hide_press"/>
 
     <imglist name="tile_num" src="img:tile_num#2" states="9" scale="200"/>
     <imglist name="tile_ques" src="img:tile_ques#2" states="3" scale="200"/>
@@ -13,6 +15,8 @@
     <imglist name="tile_flag_wrong" src="img:tile_flag_wrong#2" scale="200"/>
     <imglist name="tile_mine" src="img:tile_mine#2" scale="200"/>
     <imglist name="tile_hide" src="img:tile_hide#2" states="3" scale="200"/>
+    <imglist name="tile_hide_normal" src="img:tile_hide_normal#2" scale="200"/>
+    <imglist name="tile_hide_press" src="img:tile_hide_press#2" scale="200"/>
         
     <imglist name="skin_win" src="img:png_win" states="26"/>
     <imglist name="skin_fail" src="img:png_fail" states="15"/>

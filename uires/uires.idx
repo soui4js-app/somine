@@ -17,6 +17,8 @@
   </ICON>
   <img>
     <file name="tile_hide"  path="image\100\tile_hide.png"/>
+    <file name="tile_hide_normal"  path="image\100\tile_hide_normal.png"/>
+    <file name="tile_hide_press"  path="image\100\tile_hide_press.png"/>
     <file name="tile_num"  path="image\100\tile_num.png"/>
     <file name="tile_ques"  path="image\100\tile_ques.png"/>
     <file name="tile_flag"  path="image\100\tile_flag.png"/>
@@ -24,6 +26,8 @@
     <file name="tile_flag_wrong"  path="image\100\tile_flag_wrong.png"/>
     
     <file name="tile_hide#2"  path="image\200\tile_hide.png"/>
+    <file name="tile_hide_normal#2"  path="image\200\tile_hide_normal.png"/>
+    <file name="tile_hide_press#2"  path="image\200\tile_hide_press.png"/>
     <file name="tile_num#2"  path="image\200\tile_num.png"/>
     <file name="tile_ques#2"  path="image\200\tile_ques.png"/>
     <file name="tile_flag#2"  path="image\200\tile_flag.png"/>
