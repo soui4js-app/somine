@@ -288,22 +288,25 @@ class MainDialog extends soui4.JsHostWnd{
 				}
 				else if(clickId == soui4.MOUSE_LBTN_UP)
 				{
+					let bCancel = !(cord.x == this.clickGrid.x && cord.y == this.clickGrid.y && evt.bHover);
 					if(this.bothClick){
-						this.clickGrid.x = -1;
-						this.onBothRelease(cord.x,cord.y);
+						this.onBothRelease(cord.x,cord.y,bCancel);
 						this.bothClick=false;
+					}else
+					{
+						this.onGridCmd(cord.x,cord.y,bCancel);
 					}
-					else if(cord.x == this.clickGrid.x && cord.y == this.clickGrid.y && evt.bHover)
-						this.onGridCmd(cord.x,cord.y);
+					this.clickGrid.x = -1;											
 				}	
 				else if(clickId == soui4.MOUSE_RBTN_UP){
+					let bCancel = !(cord.x == this.clickGrid.x && cord.y == this.clickGrid.y && evt.bHover);
 					if(this.bothClick){
-						this.clickGrid.x = -1;
-						this.onBothRelease(cord.x,cord.y);
+						this.onBothRelease(cord.x,cord.y,bCancel);
 						this.bothClick=false;
 					}
-					else if(cord.x == this.clickGrid.x && cord.y == this.clickGrid.y && evt.bHover)
+					else if(!bCancel)
 						this.onGridRclick(cord.x,cord.y);
+					this.clickGrid.x = -1;	
 				}
 			}
 		}
@@ -331,13 +334,14 @@ class MainDialog extends soui4.JsHostWnd{
 		}
 	}
 
-	onBothRelease(x,y){
-		console.log("onBothRelease",y,x);
+	onBothRelease(x,y,bCancel){
+		console.log("onBothRelease",y,x,bCancel);
 		let neighbours = this.board.collectInitNeighbours(x,y);
 		for(let i=0;i<neighbours.length;i++){
 			this.gridPress(neighbours[i].x,neighbours[i].y,false);
 		}
-		this.board.autoExplore(x,y);
+		if(!bCancel)
+			this.board.autoExplore(x,y);
 	}
 
 	gridPress(x,y,isPress){
@@ -350,7 +354,7 @@ class MainDialog extends soui4.JsHostWnd{
 		let idx = this.board.cord2index(x,y);
 		let stackState = board.FindIChildByID(base_id+idx).FindIChildByName("stack_state");
 		let stackApi = soui4.QiIStackView(stackState);
-		stackApi.SelectPage(isPress?(Status.clear+1):Status.init);
+		stackApi.SelectPage(isPress?(Status.clear+1):Status.init,true);
 		stackApi.Release();
 	}
 
@@ -371,11 +375,14 @@ class MainDialog extends soui4.JsHostWnd{
 		this.gridPress(x,y,true);
 	}
 
-	onGridCmd(x,y){
+	onGridCmd(x,y,bCancel){
 		if(this.board.getState(x,y)!=Status.init)
 			return;
-		console.log("onGridCmd",y,x);
-		this.board.setMine(x,y,false);
+		console.log("onGridCmd",y,x,bCancel);
+		if(bCancel)
+			this.gridPress(x,y,false);
+		else
+			this.board.setMine(x,y,false);
 	}
 	
 	onGridRclick(x,y){
