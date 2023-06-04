@@ -30,9 +30,9 @@ translucent="1"
 			<button name="btn_reset" name="btn_reset" size="80,30" text="重来"/>
 			<window size="0,0" weight="1"/>
 		</window> 
-		<window size="-1,-1">
-			<window pos="0,0" size="-1,-1" name="wnd_board" layout="gridlayout" interval="0" gravity="fill"/>
-			<stack pos="0,0,-0,-0"  name="stack_result" visible="0" curSel="-1">
+		<stack size="-1,-1" curSel="-2">
+			<window name="wnd_board" layout="gridlayout" interval="0" gravity="fill"/>
+			<stack size="-2,-2" name="stack_result" visible="0" curSel="-1">
 				<window name="wnd_win" layout="vbox" gravity="center">
 					<img skin="img_congratulations"/>
 					<animateimg skin="skin_win" autoStart="1" speed="100"/>
@@ -42,7 +42,7 @@ translucent="1"
 					<animateimg skin="skin_fail" autoStart="1" speed="100"/>
 				</window>
 			</stack>
-		</window>
+		</stack>
     </window>
   </root>
 </SOUI>
