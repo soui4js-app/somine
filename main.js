@@ -234,8 +234,9 @@ class MainDialog extends soui4.JsHostWnd{
 	onResult(bSucceed){
 		console.log("game over");
 		let stack_result = this.FindIChildByName("stack_result");
-		stack_result.SetVisible(true,true);
 		let stackApi = soui4.QiIStackView(stack_result);
+		stackApi.SelectPage(-1,false);
+		stack_result.SetVisible(true,true);
 		stackApi.SelectPage(bSucceed?0:1,true);
 		stackApi.Release();
 		this.endTick();
