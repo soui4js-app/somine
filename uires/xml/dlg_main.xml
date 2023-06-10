@@ -18,8 +18,9 @@ translucent="1"
 			<text text=":"/>
 			<text size="50,-2" name="txt_mine" text="0"/>
 			<img skin="icon_timer"/>
-			<text text=":"/>
-			<text size="50,-2" name="txt_time_cost" text="0"/>
+			<include src="xml:digit" name="digit_time_2"/>
+			<include src="xml:digit" name="digit_time_1"/>
+			<include src="xml:digit" name="digit_time_0"/>
 			<button name="btn_reset" name="btn_reset" size="80,30" text="重来"/>
 			<window size="0,0" weight="1"/>
 		</window> 
