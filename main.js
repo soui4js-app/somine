@@ -1,5 +1,6 @@
 ﻿import * as soui4 from "soui4";
 import * as os from "os";
+import * as std from "std";
 import * as utils from "utils.dll";
 
 var g_workDir="";
@@ -287,6 +288,13 @@ class MainDialog extends soui4.JsHostWnd{
 		super("layout:dlg_main");
 		this.onEvt = this.onEvent;
 		this.settings={mode:Mode.easy,enableQuestion:true};
+		let f = std.open(g_workDir+"\\settings.json", "r");
+		if(f!=null){
+			let settingStr = f.readAsString();
+			this.settings = JSON.parse(settingStr);	
+			f.close();
+		}
+
 		this.board = new MineBoard(this);
 		this.clickGrid={x:-1,y:-1};
 		this.bothClick = false;
@@ -551,7 +559,7 @@ class MainDialog extends soui4.JsHostWnd{
 		soui4.SConnect(this.FindIChildByName("ani_fail"),soui4.EVT_IMAGE_ANI_REPEAT,this,this.onFailAniRepeat);
 
 
-		this.onInitBoard(Mode.easy);
+		this.onInitBoard(this.settings.mode);
 		this.onReset();
 		this.GetIRoot().Update();
 		this.CenterWindow(0);
@@ -561,6 +569,16 @@ class MainDialog extends soui4.JsHostWnd{
 		//do uninit.
 		//note: must check the timer and stop it if existed.
 		this.endTick();
+
+		//save to file.
+		try{
+			let f = std.open(g_workDir+"\\settings.json", "w");
+			let settingStr = JSON.stringify(this.settings);
+			f.puts(settingStr);
+			f.close();
+		}catch(e){
+			console.log(e);
+		}
 		console.log("uninit");
 	}
 };
