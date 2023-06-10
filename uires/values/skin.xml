@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <skin>
+    <imglist name="btn_config" src="img:btn_config" states="3"/>
     <imglist name="tile_num" src="img:tile_num" states="9"/>
     <imglist name="tile_ques" src="img:tile_ques" states="3"/>
     <imglist name="tile_flag" src="img:tile_flag" states="3"/>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SOUI name="option" title="@string/option" bigIcon="ICON_LOGO:32" smallIcon="ICON_LOGO:16" margin="5,5,5,5"  resizable="0" wndType="normal"
+translucent="1"
+>
+  <root skin="_skin.sys.wnd.bkgnd" cache="1"  width="300" height="200" layout="vbox" gravity="center" interval="10">
+    <caption size="-2,30" layout="hbox" gravity="center">
+		<icon src="ICON_LOGO:16"/>
+		<text>@string/option</text>
+		<window size="0,0" weight="1"/>
+      	<imgbtn id="sysid_close" skin="_skin.sys.btn.close"    pos="-45,0" tip="close" animate="1"/>
+    </caption>
+    <window size="-2,-1" padding="5" layout="vbox" interval="10">
+		<group size="-2,-1" layout="hbox" interval="10" gravity="center" text="选择难度" padding="10">
+			<radio name="opt_easy" id="200" text="基础" checked="1"/>
+			<radio name="opt_middle" id="201" text="中级"/>
+			<radio name="opt_hard" id="202" text="专家"/>
+		</group>
+		<check name="chk_enable_ques" id="300" text="标记未知" checked="1"/>
+    </window>
+    <window size="-1,-1" layout="hbox" interval="50">
+        <button size="100,30" id="IDOK" text="OK"/>
+        <button size="100,30" id="IDCANCEL" text="Cancel"/>
+    </window>
+  </root>
+</SOUI>

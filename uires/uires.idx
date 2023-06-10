@@ -4,6 +4,7 @@
   </UIDEF>
   <LAYOUT>
     <file name="dlg_main" path="xml\dlg_main.xml"/>
+    <file name="dlg_option" path="xml\dlg_option.xml"/>
   </LAYOUT>
   
   <values>
@@ -16,6 +17,7 @@
     <file name="ICON_LOGO"  path="image\soui.ico"/>
   </ICON>
   <img>
+    <file name="btn_config"  path="image\btn_config.png"/>
     <file name="tile_hide_normal"  path="image\100\tile_hide_normal.png"/>
     <file name="tile_hide_press"  path="image\100\tile_hide_press.png"/>
     <file name="tile_num"  path="image\100\tile_num.png"/>

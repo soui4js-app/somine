@@ -218,19 +218,87 @@ const Mode={
 	hard:2,
 };
 
+const id_mode_base = 200;
+const id_chk_enable_ques=300;
+
+class OptionDlg extends soui4.JsHostDialog{
+	constructor(settings){
+		super("layout:dlg_option");
+		this.settings = {...settings};//{mode:0,enable_ques:true}
+		this.onEvt = this.onEvent;
+	}
+
+	onEvent(e){
+		let evt_id = e.GetID();
+		switch(evt_id){
+			case soui4.EVT_INIT:
+				this.onInit();
+				break;
+			case soui4.EVT_EXIT:
+				this.onUninit();
+				break;
+			case soui4.EVT_STATECHANGED:
+				this.onStateChanged(e);
+				break;
+		}
+	}
+
+	isEventCheck(e){
+		let evtStateChanged = soui4.toEventSwndStateChanged(e);
+		if(!evtStateChanged)
+			return false;
+		return (evtStateChanged.dwOldState&soui4.WndState_Check) != (evtStateChanged.dwNewState&soui4.WndState_Check)
+	}
+
+	onStateChanged(e){
+		if(!this.isEventCheck(e))
+			return;
+		let id = e.Sender().GetID();
+		let wnd = soui4.toIWindow(e.Sender());
+
+		switch(id){
+			case id_mode_base+Mode.easy:
+			case id_mode_base+Mode.middle:
+			case id_mode_base+Mode.hard:
+				{
+					if(wnd.IsChecked())
+						this.settings.mode = id-id_mode_base;
+				}
+				break;
+			case id_chk_enable_ques:
+				this.settings.enableQuestion=wnd.IsChecked();
+				break;
+		}
+	}
+
+	onInit(){
+		//defind 2 id, value is defined in dlg_option.xml
+		this.FindIChildByID(id_mode_base+this.settings.mode).SetCheck(true);
+		this.FindIChildByID(id_chk_enable_ques).SetCheck(this.settings.enableQuestion);
+	}
+
+	onUninit(){
+		this.onEvt = null;
+	}
+}
+
 class MainDialog extends soui4.JsHostWnd{
 	constructor(){
 		super("layout:dlg_main");
 		this.onEvt = this.onEvent;
-		this.mode = Mode.easy;
+		this.settings={mode:Mode.easy,enableQuestion:true};
 		this.board = new MineBoard(this);
-		this.enableQuestion=true;
 		this.clickGrid={x:-1,y:-1};
 		this.bothClick = false;
 		this.timer = null;
 		this.time_cost = 0;
 	}
 
+	playSound(bWin){
+		let sound = g_workDir+"\\Sound\\";
+		sound += bWin?"win.wav":"lose.wav";
+		utils.PlaySound(sound,false);
+	}
 	onResult(bSucceed){
 		console.log("game over");
 		let stack_result = this.FindIChildByName("stack_result");
@@ -240,9 +308,7 @@ class MainDialog extends soui4.JsHostWnd{
 		stackApi.SelectPage(bSucceed?0:1,true);
 		stackApi.Release();
 		this.endTick();
-		let sound = g_workDir+"\\Sound\\";
-		sound += bSucceed?"win.wav":"lose.wav";
-		utils.PlaySound(sound,false);
+		this.playSound(bSucceed);
 	}
 
 	onSetGridState(mode,x,y,state){
@@ -395,7 +461,7 @@ class MainDialog extends soui4.JsHostWnd{
 		if(stat == Status.init)
 			this.board.setMine(x,y,true);
 		else {
-			if(this.enableQuestion){
+			if(this.settings.enableQuestion){
 				if(stat == Status.flag_mine)
 					this.board.setState(x,y,Status.flag_ques);
 				else if(stat == Status.flag_ques)
@@ -407,19 +473,28 @@ class MainDialog extends soui4.JsHostWnd{
 		}
 	}
 
-	onEnableQuestion(e){
-		let wnd = soui4.toIWindow(e.Sender());
-		this.enableQuestion = wnd.IsChecked();
-	}
-
 	onOptBtn(e){
-		let id = e.Sender().GetID();
-		this.onInitBoard(id-200);
-		this.GetIRoot().Update();
-		this.CenterWindow(0);
-		this.onBtnReset(e);
+		let dlgOption = new OptionDlg(this.settings);
+		if(dlgOption.DoModal(this.GetHwnd())==1){//1=IDOK
+			let oldSetting = {...this.settings};
+			this.settings = dlgOption.settings;
+			if(oldSetting.mode != this.settings.mode){
+				//regenerate board
+				this.onInitBoard(this.settings.mode);
+				this.GetIRoot().Update();
+				this.CenterWindow(0);
+				this.onBtnReset(e);
+			}
+		}
 	}
 
+	onWinAniRepeat(e){
+		this.playSound(true);
+	}
+
+	onFailAniRepeat(e){
+		this.playSound(false);
+	}
 	
 	buildBoard(mode){
 		let rows = boardInfo[mode].rows
@@ -470,11 +545,12 @@ class MainDialog extends soui4.JsHostWnd{
 
 	init(){
 		console.log("init");
-		soui4.SConnect(this.FindIChildByName("chk_enable_ques"),soui4.EVT_CMD,this,this.onEnableQuestion);
-		soui4.SConnect(this.FindIChildByID(200),soui4.EVT_CMD,this,this.onOptBtn);
-		soui4.SConnect(this.FindIChildByID(201),soui4.EVT_CMD,this,this.onOptBtn);
-		soui4.SConnect(this.FindIChildByID(202),soui4.EVT_CMD,this,this.onOptBtn);
 		soui4.SConnect(this.FindIChildByName("btn_reset"),soui4.EVT_CMD,this,this.onBtnReset);
+		soui4.SConnect(this.FindIChildByName("btn_option"),soui4.EVT_CMD,this,this.onOptBtn);
+		soui4.SConnect(this.FindIChildByName("ani_win"),soui4.EVT_IMAGE_ANI_REPEAT,this,this.onWinAniRepeat);
+		soui4.SConnect(this.FindIChildByName("ani_fail"),soui4.EVT_IMAGE_ANI_REPEAT,this,this.onFailAniRepeat);
+
+
 		this.onInitBoard(Mode.easy);
 		this.onReset();
 		this.GetIRoot().Update();

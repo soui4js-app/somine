@@ -7,18 +7,11 @@ translucent="1"
 		<icon src="ICON_LOGO:16"/>
 		<text>@string/title</text>
 		<window size="0,0" weight="1"/>
+		<imgbtn name="btn_option" tip="option" skin="btn_config"/>
 		<imgbtn id="sysid_min" skin="_skin.sys.btn.minimize" animate="1" />
-      	<imgbtn id="sysid_close" skin="_skin.sys.btn.close"    pos="-45,0" tip="close" animate="1"/>
+      	<imgbtn id="sysid_close" skin="_skin.sys.btn.close"   tip="close" animate="1"/>
     </caption>
     <window size="-1,-1" padding="5" layout="vbox">
-		<window size="-2,30" layout="hbox" interval="10" gravity="center">
-			<window size="0,0" weight="1"/>
-			<radio name="opt_easy" id="200" text="基础" checked="1"/>
-			<radio name="opt_middle" id="201" text="中级"/>
-			<radio name="opt_hard" id="202" text="专家"/>
-			<window size="0,0" weight="1"/>
-			<check name="chk_enable_ques" text="标记未知" checked="1"/>
-		</window>
 		<window size="-2,49" layout="hbox" interval="2" gravity="center">
 			<window size="0,0" weight="1"/>
 			<img skin="icon_mine"/>
@@ -35,11 +28,11 @@ translucent="1"
 			<stack size="-2,-2" name="stack_result" visible="0" curSel="-1" aniType="push" vertical="1" duration="2000">
 				<window name="wnd_win" layout="vbox" gravity="center">
 					<img skin="img_congratulations"/>
-					<animateimg skin="skin_win" autoStart="1" speed="100"/>
+					<animateimg skin="skin_win" name="ani_win" autoStart="1" speed="100"/>
 				</window>
 				<window name="wnd_fail" layout="vbox" gravity="center">
 					<img skin="img_better_luck"/>
-					<animateimg skin="skin_fail" autoStart="1" speed="100"/>
+					<animateimg skin="skin_fail" name="ani_fail" autoStart="1" speed="100"/>
 				</window>
 			</stack>
 		</stack>
