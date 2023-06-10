@@ -333,8 +333,7 @@ class MainDialog extends soui4.JsHostWnd{
 			imgApi.Release();
 		}
 		stackApi.Release();
-		let txt_mine = this.FindIChildByName("txt_mine");
-		txt_mine.SetWindowText(""+this.board.getRemain());
+		this.setRemainMine(this.board.getRemain());
 	}
 
 	onEvent(e){
@@ -392,18 +391,29 @@ class MainDialog extends soui4.JsHostWnd{
 		let stack=this.FindIChildByName(digitName);
 		if(stack!=0){
 			let stackApi=soui4.QiIStackView(stack);
-			stackApi.SelectPage(digit);
+			stackApi.SelectPage(digit,true);
 			stackApi.Release();
 		}
 	}
-	onTick(){
-		this.time_cost++;
-		let dig0 = this.time_cost%10;
-		let dig1 = this.time_cost/10%10;
-		let dig2 = this.time_cost/100%10;
+
+	setRemainMine(mines){
+		let dig0 = mines%10;
+		let dig1 = mines/10%10;
+		this.setDigit("digit_mine_0",dig0);
+		this.setDigit("digit_mine_1",dig1);
+	}
+
+	setTimeCost(num){
+		let dig0 = num%10;
+		let dig1 = num/10%10;
+		let dig2 = num/100%10;
 		this.setDigit("digit_time_0",dig0);
 		this.setDigit("digit_time_1",dig1);
 		this.setDigit("digit_time_2",dig2);
+	}
+	onTick(){
+		this.time_cost++;
+		this.setTimeCost(this.time_cost);
 		this.timer = os.setTimeout(this.onTick, 1000,this);
 	}
 
@@ -543,6 +553,7 @@ class MainDialog extends soui4.JsHostWnd{
 		board.RequestRelayout();
 	}
 
+
 	onReset(){
 		let bi = boardInfo[this.mode];
 		this.board.reset(bi.rows,bi.cols,bi.mines);
@@ -552,15 +563,13 @@ class MainDialog extends soui4.JsHostWnd{
 			}
 		}
 		let txt_mine=this.FindIChildByName("txt_mine");
-		txt_mine.SetWindowText(""+this.board.getRemain());
+		this.setRemainMine(this.board.getRemain());
 		if(this.timer!=null)
 		{
 			os.clearTimeout(this.timer);
 			this.timer=null;
 			this.time_cost=0;
-			this.setDigit("digit_time_0",0);
-			this.setDigit("digit_time_1",0);
-			this.setDigit("digit_time_2",0);
+			this.setTimeCost(0);
 		}
 
 	}

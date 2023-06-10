@@ -12,12 +12,12 @@ translucent="1"
       	<imgbtn id="sysid_close" skin="_skin.sys.btn.close"   tip="close" animate="1"/>
     </caption>
     <window size="-1,-1" padding="5" layout="vbox">
-		<window size="-2,49" layout="hbox" interval="2" gravity="center">
+		<window size="-2,49" layout="hbox" gravity="center">
 			<window size="0,0" weight="1"/>
 			<img skin="icon_mine"/>
-			<text text=":"/>
-			<text size="50,-2" name="txt_mine" text="0"/>
-			<img skin="icon_timer"/>
+			<include src="xml:digit" name="digit_mine_1"/>
+			<include src="xml:digit" name="digit_mine_0"/>
+			<img skin="icon_timer" extend_left="10"/>
 			<include src="xml:digit" name="digit_time_2"/>
 			<include src="xml:digit" name="digit_time_1"/>
 			<include src="xml:digit" name="digit_time_0"/>
