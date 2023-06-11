@@ -568,9 +568,9 @@ class MainDialog extends soui4.JsHostWnd{
 		{
 			os.clearTimeout(this.timer);
 			this.timer=null;
-			this.time_cost=0;
-			this.setTimeCost(0);
 		}
+		this.time_cost=0;
+		this.setTimeCost(0);
 
 	}
 
