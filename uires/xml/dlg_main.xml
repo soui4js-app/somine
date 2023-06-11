@@ -13,16 +13,16 @@ translucent="1"
     </caption>
     <window size="-1,-1" padding="5" layout="vbox">
 		<window size="-2,49" layout="hbox" gravity="center">
-			<window size="0,0" weight="1"/>
-			<img skin="icon_mine"/>
+			<img skin="icon_mine" />
 			<include src="xml:digit" name="digit_mine_1"/>
 			<include src="xml:digit" name="digit_mine_0"/>
+			<window size="0,0" weight="1"/>
+			<button size="100,-2" name="btn_reset" skin="skin_btn_bg" text="重新开始" extend="5,5,5,5"/>
+			<window size="0,0" weight="1"/>
 			<img skin="icon_timer" extend_left="10"/>
 			<include src="xml:digit" name="digit_time_2"/>
 			<include src="xml:digit" name="digit_time_1"/>
 			<include src="xml:digit" name="digit_time_0"/>
-			<button name="btn_reset" name="btn_reset" size="80,30" text="重来"/>
-			<window size="0,0" weight="1"/>
 		</window> 
 		<stack size="-1,-1" curSel="-2" colorBkgnd1="@color/red">
 			<window name="wnd_board" layout="gridlayout" interval="0" gravity="fill"/>

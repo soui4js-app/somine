@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <skin>
+    <imgframe name="skin_btn_bg" src="img:png_btn_bg" states="4" margin="5,5,5,5"/>
     <imglist name="skin_digit" src="img:png_digit" states="10"/>
     <imglist name="btn_config" src="img:btn_config" states="3"/>
     <imglist name="tile_num" src="img:tile_num" states="9"/>
