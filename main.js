@@ -122,6 +122,37 @@ class MineBoard{
 		this.mainDlg.onSetGridState(this.mode,x,y,state);
 	}
 
+	//查找一个连续无雷的的位置
+	findStartPos(startx,starty,xdir,ydir){
+		let minRoundMines = 100;
+		let x1=1,x2=this.cols-1;
+		let y1=1,y2=this.rows-1;
+		if(xdir>0){
+			x1=startx;
+		}else{
+			x2=startx;
+		}
+		if(ydir>0){
+			y1=starty;
+		}else{
+			y2=starty;
+		}
+		for(let y=y1;y<y2;y++){
+			for(let x=x1;x<x2;x++){
+				if(this.getState(x,y)==Status.init && !this.board[y][x].mine)
+				{
+					let roundMines = this.getRoundMines(x,y);
+					if(roundMines<minRoundMines){
+						minRoundMines=roundMines;
+						if(roundMines==0)
+							return {"x":x,"y":y};
+					}					
+				}
+			}
+		}
+		return {x:-1,y:-1};
+	}
+
 	isMine(x,y){
 		return this.board[y][x].mine;
 	}
@@ -237,6 +268,7 @@ const Mode={
 
 const id_mode_base = 200;
 const id_chk_enable_ques=300;
+const id_chk_auto_start = 301;
 
 class OptionDlg extends soui4.JsHostDialog{
 	constructor(settings){
@@ -285,6 +317,9 @@ class OptionDlg extends soui4.JsHostDialog{
 			case id_chk_enable_ques:
 				this.settings.enableQuestion=wnd.IsChecked();
 				break;
+			case id_chk_auto_start:
+				this.settings.autoStart = wnd.IsChecked();
+				break;
 		}
 	}
 
@@ -292,6 +327,7 @@ class OptionDlg extends soui4.JsHostDialog{
 		//defind 2 id, value is defined in dlg_option.xml
 		this.FindIChildByID(id_mode_base+this.settings.mode).SetCheck(true);
 		this.FindIChildByID(id_chk_enable_ques).SetCheck(this.settings.enableQuestion);
+		this.FindIChildByID(id_chk_auto_start).SetCheck(this.settings.autoStart);
 	}
 
 	onUninit(){
@@ -303,7 +339,7 @@ class MainDialog extends soui4.JsHostWnd{
 	constructor(){
 		super("layout:dlg_main");
 		this.onEvt = this.onEvent;
-		this.settings={mode:Mode.easy,enableQuestion:true};
+		this.settings={mode:Mode.easy,enableQuestion:true,autoStart:true};
 		let f = std.open(g_workDir+"\\settings.json", "r");
 		if(f!=null){
 			let settingStr = f.readAsString();
@@ -617,6 +653,27 @@ class MainDialog extends soui4.JsHostWnd{
 		let btnHelp=this.FindIChildByName("btn_help");
 		btnHelp.SetWindowText("帮助("+(this.helpTimes - this.help_cost)+")");
 		btnHelp.SetVisible(this.helpTimes>0,true);
+		if(this.settings.autoStart){
+			//randomly find a start pos
+			let startx = Math.round(Math.random()*(this.board.cols-2)+1);
+			let starty = Math.round(Math.random()*(this.board.rows-2)+1);
+			let dirx=[-1,1];
+			let diry=[-1,1];
+			let bFind = false;
+			for(let xd=0;xd<2 && !bFind;xd++){
+				for(let yd=0;yd<2 && !bFind;yd++){
+					//console.log("find start pos,startx=",startx,"starty=",starty,"dirx=",dirx[xd],"diry=",diry[yd]);
+					let pos = this.board.findStartPos(startx,starty,dirx[xd],diry[yd]);
+					if(pos.x!=-1){
+						bFind = true;
+						if(this.board.getRoundMines(pos.x,pos.y)!=0){
+							console.log("error",pos.x,pos.y,"mines=",this.board.getRoundMines(pos.x,pos.y));
+						}
+						this.board.setMine(pos.x,pos.y,false);
+					}
+				}
+			} 
+		}
 	}
 
 	onBtnReset(e){

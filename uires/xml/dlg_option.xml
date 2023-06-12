@@ -15,7 +15,10 @@ translucent="1"
 			<radio name="opt_middle" id="201" text="中级"/>
 			<radio name="opt_hard" id="202" text="专家"/>
 		</group>
-		<check name="chk_enable_ques" id="300" text="标记未知" checked="1"/>
+    <window size="-2,-1" layout="hbox" interval="10">
+      <check name="chk_enable_ques" id="300" text="标记未知"/>
+      <check name="chk_auto_start" id="301" text="自动开局"/>
+    </window>
     </window>
     <window size="-1,-1" layout="hbox" interval="50">
         <button size="100,30" id="IDOK" text="OK"/>
