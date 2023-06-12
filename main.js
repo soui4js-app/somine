@@ -122,6 +122,10 @@ class MineBoard{
 		this.mainDlg.onSetGridState(this.mode,x,y,state);
 	}
 
+	isMine(x,y){
+		return this.board[y][x].mine;
+	}
+
 	getSafeGrid(){
 		for(let y=0;y<this.rows;y++){
 		for(let x=0;x<this.cols;x++){
@@ -330,6 +334,30 @@ class MainDialog extends soui4.JsHostWnd{
 		stackApi.SelectPage(bSucceed?0:1,true);
 		stackApi.Release();
 		this.endTick();
+		if(!bSucceed){
+			//open all mines
+			for(let y=0;y<this.board.rows;y++){
+				for(let x=0;x<this.board.cols;x++)
+				{
+					let state = -1;
+					if(this.board.isMine(x,y)){
+						if(this.board.getState(x,y)==Status.init){
+							state = Status.exploded;
+						}
+					}else if(this.board.getState(x,y)==Status.flag_mine)
+					{
+						state = Status.flag_wrong;
+					}
+					if(state != -1){
+						let idx = this.board.cord2index(x,y);
+						let grid = this.FindIChildByID(base_id+idx).FindIChildByName("stack_state");
+						let stackApi = soui4.QiIStackView(grid);
+						stackApi.SelectPage(state,true);
+						stackApi.Release();
+					}
+				}
+			}
+		}
 		this.playSound(bSucceed);
 	}
 
