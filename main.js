@@ -16,9 +16,9 @@ const Status ={
 
 //定义一个全局的信息
 const boardInfo = [
-	{rows:9,cols:9,mines:9},
-	{rows:16,cols:16,mines:40},
-	{rows:16,cols:30,mines:99}
+	{rows:9,cols:9,mines:9,helpTimes:0},
+	{rows:16,cols:16,mines:40,helpTimes:1},
+	{rows:16,cols:30,mines:99,helpTimes:2}
 ];
 
 const base_id=1000;
@@ -120,6 +120,18 @@ class MineBoard{
 			this.opened++;
 		}
 		this.mainDlg.onSetGridState(this.mode,x,y,state);
+	}
+
+	getSafeGrid(){
+		for(let y=0;y<this.rows;y++){
+		for(let x=0;x<this.cols;x++){
+			if(this.getState(x,y)==Status.init && !this.board[y][x].mine)
+			{
+				return {x:x,y:y};
+			}
+		}
+		}
+		return {x:-1,y:-1};
 	}
 
 	setMine(x,y,isMine){
@@ -300,6 +312,8 @@ class MainDialog extends soui4.JsHostWnd{
 		this.bothClick = false;
 		this.timer = null;
 		this.time_cost = 0;
+		this.helpTimes = 0;
+		this.help_cost = 0;
 	}
 
 	playSound(bWin){
@@ -562,7 +576,6 @@ class MainDialog extends soui4.JsHostWnd{
 				this.gridPress(x,y,false);
 			}
 		}
-		let txt_mine=this.FindIChildByName("txt_mine");
 		this.setRemainMine(this.board.getRemain());
 		if(this.timer!=null)
 		{
@@ -571,7 +584,11 @@ class MainDialog extends soui4.JsHostWnd{
 		}
 		this.time_cost=0;
 		this.setTimeCost(0);
-
+		this.helpTimes = bi.helpTimes;
+		this.help_cost = 0;
+		let btnHelp=this.FindIChildByName("btn_help");
+		btnHelp.SetWindowText("帮助("+(this.helpTimes - this.help_cost)+")");
+		btnHelp.SetVisible(this.helpTimes>0,true);
 	}
 
 	onBtnReset(e){
@@ -580,14 +597,30 @@ class MainDialog extends soui4.JsHostWnd{
 		stack_result.SetVisible(false,true);
 	}
 
+	onBtnHelp(e){
+		if(this.time_cost>0){
+			if(this.help_cost<this.helpTimes){
+				let pos = this.board.getSafeGrid();
+				if(pos.x!=-1)
+					this.board.setMine(pos.x,pos.y,false);
+				let btnHelp=this.FindIChildByName("btn_help");
+				this.help_cost++;
+				btnHelp.SetWindowText("帮助("+(this.helpTimes - this.help_cost)+")");		
+			}
+		}else{
+			soui4.SMessageBox(this.GetHwnd(),"游戏还没有开始","提示",soui4.MB_OK);
+		}
+	}
+
 	init(){
 		console.log("init");
 		soui4.SConnect(this.FindIChildByName("btn_reset"),soui4.EVT_CMD,this,this.onBtnReset);
+		soui4.SConnect(this.FindIChildByName("btn_help"),soui4.EVT_CMD,this,this.onBtnHelp);
 		soui4.SConnect(this.FindIChildByName("btn_option"),soui4.EVT_CMD,this,this.onOptBtn);
 		soui4.SConnect(this.FindIChildByName("ani_win"),soui4.EVT_IMAGE_ANI_REPEAT,this,this.onWinAniRepeat);
 		soui4.SConnect(this.FindIChildByName("ani_fail"),soui4.EVT_IMAGE_ANI_REPEAT,this,this.onFailAniRepeat);
 
-
+		
 		this.onInitBoard(this.settings.mode);
 		this.onReset();
 		this.GetIRoot().Update();

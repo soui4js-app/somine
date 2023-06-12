@@ -18,6 +18,7 @@ translucent="1"
 			<include src="xml:digit" name="digit_mine_0"/>
 			<window size="0,0" weight="1"/>
 			<button size="100,-2" name="btn_reset" skin="skin_btn_bg" text="重新开始" extend="5,5,5,5"/>
+			<button size="100,-2" name="btn_help" skin="skin_btn_bg" text="帮助" extend="5,5,5,5" display="0"/>
 			<window size="0,0" weight="1"/>
 			<img skin="icon_timer" extend_left="10"/>
 			<include src="xml:digit" name="digit_time_2"/>
