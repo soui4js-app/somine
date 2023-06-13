@@ -37,6 +37,9 @@ translucent="1"
 					<animateimg skin="skin_fail" name="ani_fail" autoStart="1" speed="100"/>
 				</window>
 			</stack>
+			<window name="wnd_ani_start" size="-2,-2" visible="0">
+
+			</window>
 		</stack>
     </window>
   </root>

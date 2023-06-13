@@ -47,5 +47,6 @@
   </img>
   <anim>
     <file name="slide_show" path="anim\slide_show.xml"/>
+    <file name="start" path="anim\start.xml"/>
   </anim>
 </resource>

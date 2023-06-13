@@ -65,6 +65,20 @@ class MineBoard{
 		
 	}
 
+	getMinePos(){
+		let ret=[];
+		for(let y=0;y<this.rows;y++)
+		{
+			for(let x=0;x<this.cols;x++){
+				if(this.isMine(x,y))
+				{
+					ret.push({x:x,y:y});
+				}
+			}
+		}
+		return ret;
+	}
+
 	getRemain(){
 		return this.mines-this.flags;
 	}
@@ -631,6 +645,93 @@ class MainDialog extends soui4.JsHostWnd{
 		board.RequestRelayout();
 	}
 
+	buildMines(mines){
+		let head="<t:g.mine1>";
+		let tail="</t:g.mine1>";
+		let xml="";
+		
+		for(let i=0;i<mines;i++){
+			let ele = "<data id=\""+ (base_id+i) +"\"/>";
+			xml += head+ele+tail;
+		}
+		return xml;
+	}
+
+	onAniStartStart(ani){
+		let aniFrame = this.FindIChildByName("wnd_ani_start");
+		aniFrame.CreateChildrenFromXml(this.buildMines(this.board.mines));
+		let mine=aniFrame.FindIChildByID(base_id);
+		let szMine = mine.GetDesiredSize();
+		let rc = aniFrame.GetClientRect();
+		let x = rc.left;
+		let wid = rc.right-rc.left;
+		rc.left += (rc.right-rc.left)/2-szMine.cx/2;
+		rc.top += (rc.bottom-rc.top)/2-szMine.cy/2;
+		rc.right = rc.left +szMine.cx;
+		rc.bottom = rc.top + szMine.cy;
+
+		for(let i=0;i<this.board.mines;i++){
+			let mine=aniFrame.FindIChildByID(base_id+i);
+			mine.Move(rc);
+		}
+	}
+
+	onAniStartUpdate(ani){
+		let fraction = ani.GetFraction();
+
+		let aniFrame = this.FindIChildByName("wnd_ani_start");
+		let rc = aniFrame.GetClientRect();
+		let rcFrame = new soui4.CRect(rc.left,rc.top,rc.right,rc.bottom);
+		
+		rc.left += (rc.right-rc.left)/2;
+		rc.top += (rc.bottom-rc.top)/2;
+
+		let minePos = this.board.getMinePos();
+		let mine=aniFrame.FindIChildByID(base_id);
+		let szMine = mine.GetDesiredSize();
+		for(let i=0;i<minePos.length;i++){
+			let rcEnd = new soui4.CRect(0,0,0,0);
+			rcEnd.left = rcFrame.left + szMine.cx*minePos[i].x;
+			rcEnd.top = rcFrame.top +szMine.cy*minePos[i].y;
+			let mine=aniFrame.FindIChildByID(base_id+i);
+
+			let rcNew = new soui4.CRect(0,0,0,0);
+			//using linear mode to calc
+			rcNew.left = rc.left + (rcEnd.left-rc.left)*fraction;
+			rcNew.top = rc.top + (rcEnd.top-rc.top)*fraction;
+			rcNew.right = rcNew.left + szMine.cx;
+			rcNew.bottom = rcNew.top + szMine.cy;			
+			mine.Move(rcNew);
+		}
+	}
+
+	onAniStartEnd(ani){
+		let aniFrame = this.FindIChildByName("wnd_ani_start");
+		aniFrame.SetVisible(false,true);
+		aniFrame.DestroyAllChildren();
+		if(this.settings.autoStart){
+			//randomly find a start pos
+			let startx = Math.round(Math.random()*(this.board.cols-2)+1);
+			let starty = Math.round(Math.random()*(this.board.rows-2)+1);
+			let dirx=[-1,1];
+			let diry=[-1,1];
+			let bFind = false;
+			for(let xd=0;xd<2 && !bFind;xd++){
+				for(let yd=0;yd<2 && !bFind;yd++){
+					//console.log("find start pos,startx=",startx,"starty=",starty,"dirx=",dirx[xd],"diry=",diry[yd]);
+					let pos = this.board.findStartPos(startx,starty,dirx[xd],diry[yd]);
+					if(pos.x!=-1){
+						bFind = true;
+						if(this.board.getRoundMines(pos.x,pos.y)!=0){
+							console.log("error",pos.x,pos.y,"mines=",this.board.getRoundMines(pos.x,pos.y));
+						}
+						this.board.setMine(pos.x,pos.y,false);
+					}
+				}
+			} 
+		}
+		this.aniStart=null;
+	}
 
 	onReset(){
 		let bi = boardInfo[this.mode];
@@ -653,26 +754,18 @@ class MainDialog extends soui4.JsHostWnd{
 		let btnHelp=this.FindIChildByName("btn_help");
 		btnHelp.SetWindowText("帮助("+(this.helpTimes - this.help_cost)+")");
 		btnHelp.SetVisible(this.helpTimes>0,true);
-		if(this.settings.autoStart){
-			//randomly find a start pos
-			let startx = Math.round(Math.random()*(this.board.cols-2)+1);
-			let starty = Math.round(Math.random()*(this.board.rows-2)+1);
-			let dirx=[-1,1];
-			let diry=[-1,1];
-			let bFind = false;
-			for(let xd=0;xd<2 && !bFind;xd++){
-				for(let yd=0;yd<2 && !bFind;yd++){
-					//console.log("find start pos,startx=",startx,"starty=",starty,"dirx=",dirx[xd],"diry=",diry[yd]);
-					let pos = this.board.findStartPos(startx,starty,dirx[xd],diry[yd]);
-					if(pos.x!=-1){
-						bFind = true;
-						if(this.board.getRoundMines(pos.x,pos.y)!=0){
-							console.log("error",pos.x,pos.y,"mines=",this.board.getRoundMines(pos.x,pos.y));
-						}
-						this.board.setMine(pos.x,pos.y,false);
-					}
-				}
-			} 
+
+		this.FindIChildByName("wnd_ani_start").SetVisible(true,true);
+		//start a new value animator
+		this.aniStart = new soui4.SValueAnimator();
+		this.aniStart.cbHandler = this;
+		if(this.aniStart.LoadAniamtor("anim:start")){
+			this.aniStart.onAnimationStart=this.onAniStartStart;
+			this.aniStart.onAnimationUpdate = this.onAniStartUpdate;
+			this.aniStart.onAnimationEnd = this.onAniStartEnd;
+			this.aniStart.Start(this.GetIRoot().GetContainer());
+		}else{
+			this.onAniStartEnd(null);
 		}
 	}
 
@@ -707,9 +800,9 @@ class MainDialog extends soui4.JsHostWnd{
 
 		
 		this.onInitBoard(this.settings.mode);
-		this.onReset();
 		this.GetIRoot().Update();
 		this.CenterWindow(0);
+		this.onReset();
 	}
 
 	uninit(){
