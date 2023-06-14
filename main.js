@@ -37,8 +37,9 @@ class MineBoard{
 		this.cols = cols;
 		this.mines = mines;
 
+		this.board = new Array(this.rows);
 		for(let i=0;i<this.rows;i++){
-			this.board.push([]);
+			this.board[i]=[];
 			for(let j=0;j<this.cols;j++){
 				this.board[i].push({mine:false,state:Status.init});
 			}
@@ -776,7 +777,7 @@ class MainDialog extends soui4.JsHostWnd{
 	}
 
 	onBtnHelp(e){
-		if(this.time_cost>0){
+		if(this.timer!=null){
 			if(this.help_cost<this.helpTimes){
 				let pos = this.board.getSafeGrid();
 				if(pos.x!=-1)
