@@ -19,6 +19,7 @@ translucent="1"
     <window size="-2,-1" layout="hbox" interval="10">
       <check name="chk_enable_ques" id="300" text="标记未知"/>
       <check name="chk_auto_start" id="301" text="自动开局"/>
+      <check name="chk_enable_sound" id="302" text="启用音效"/>
     </window>
     </window>
     <window size="-1,-1" layout="hbox" interval="50">

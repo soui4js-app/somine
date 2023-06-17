@@ -284,6 +284,7 @@ const Mode={
 const id_mode_base = 200;
 const id_chk_enable_ques=300;
 const id_chk_auto_start = 301;
+const id_chk_enable_sound = 302;
 
 class OptionDlg extends soui4.JsHostDialog{
 	constructor(settings){
@@ -335,6 +336,9 @@ class OptionDlg extends soui4.JsHostDialog{
 			case id_chk_auto_start:
 				this.settings.autoStart = wnd.IsChecked();
 				break;
+			case id_chk_enable_sound:
+				this.settings.enableSound = wnd.IsChecked();
+				break;
 		}
 	}
 
@@ -343,6 +347,7 @@ class OptionDlg extends soui4.JsHostDialog{
 		this.FindIChildByID(id_mode_base+this.settings.mode).SetCheck(true);
 		this.FindIChildByID(id_chk_enable_ques).SetCheck(this.settings.enableQuestion);
 		this.FindIChildByID(id_chk_auto_start).SetCheck(this.settings.autoStart);
+		this.FindIChildByID(id_chk_enable_sound).SetCheck(this.settings.enableSound);
 	}
 
 	onUninit(){
@@ -354,7 +359,7 @@ class MainDialog extends soui4.JsHostWnd{
 	constructor(){
 		super("layout:dlg_main");
 		this.onEvt = this.onEvent;
-		this.settings={mode:Mode.easy,enableQuestion:true,autoStart:true};
+		this.settings={mode:Mode.easy,enableQuestion:true,autoStart:true,enableSound:true};
 		let f = std.open(g_workDir+"\\settings.json", "r");
 		if(f!=null){
 			let settingStr = f.readAsString();
@@ -372,6 +377,8 @@ class MainDialog extends soui4.JsHostWnd{
 	}
 
 	playSound(bWin){
+		if(!this.settings.enableSound)
+			return;
 		let sound = g_workDir+"\\Sound\\";
 		sound += bWin?"win.wav":"lose.wav";
 		utils.PlaySound(sound,false);
@@ -732,6 +739,8 @@ class MainDialog extends soui4.JsHostWnd{
 			} 
 		}
 		this.aniStart=null;
+		console.log("onStartAnimation ended and do gc");
+		std.gc();
 	}
 
 	onReset(){
