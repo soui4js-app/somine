@@ -173,15 +173,21 @@ class MineBoard{
 	}
 
 	getSafeGrid(){
+		let pos=[];
 		for(let y=0;y<this.rows;y++){
 		for(let x=0;x<this.cols;x++){
 			if(this.getState(x,y)==Status.init && !this.board[y][x].mine)
 			{
-				return {x:x,y:y};
+				pos.push({x:x,y:y});
 			}
 		}
 		}
-		return {x:-1,y:-1};
+		if(pos.length==0)
+			return {x:-1,y:-1};
+		else{
+			let idx = Math.round(Math.random()*pos.length);
+			return pos[idx];
+		}
 	}
 
 	setMine(x,y,isMine){
