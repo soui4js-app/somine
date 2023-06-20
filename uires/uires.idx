@@ -44,10 +44,12 @@
     <file name="icon_mine"  path="image\icon-mine.png"/>
     <file name="img_congratulations" path="image\congratulations.png"/>
     <file name="img_better_luck" path="image\better-luck.png"/>
+    <file name="img_gold" path="image\gold.png"/>
   </img>
   <anim>
     <file name="slide_show" path="anim\slide_show.xml"/>
     <file name="slide_hide" path="anim\slide_hide.xml"/>
     <file name="start" path="anim\start.xml"/>
+    <file name="gold" path="anim\gold.xml"/>
   </anim>
 </resource>

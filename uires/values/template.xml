@@ -24,9 +24,15 @@
         <img size="-2,-2"  skin="tile_num"/>
         <img size="-2,-2" skin="tile_hide_press" />
       </stack>
+      <stack name="stack_effect" size="-2,-2" curSel="-1" msgTransparent="1">
+        <animateimg size="-2,-2" skin="tile_flag" speed="100"/>
+      </stack>
     </stack>
   </g.mine>
   <g.mine1>
     <img id="{{id}}" size="-1,-1" skin="tile_mine"/>
   </g.mine1>
+  <g.gold>
+  	<img id="{{id}}" size="-1,-1" skin="img_gold"/>
+  </g.gold>
 </template>

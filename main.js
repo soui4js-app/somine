@@ -672,15 +672,13 @@ class MainDialog extends soui4.JsHostWnd{
 	}
 
 	onAniStartStart(ani){
-		let aniFrame = this.FindIChildByName("wnd_ani_start");
+		let aniFrame = this.FindIChildByName("wnd_effect");
 		aniFrame.CreateChildrenFromXml(this.buildMines(this.board.mines));
 		let mine=aniFrame.FindIChildByID(base_id);
 		let szMine = mine.GetDesiredSize();
 		let rc = aniFrame.GetClientRect();
-		let x = rc.left;
-		let wid = rc.right-rc.left;
-		rc.left += (rc.right-rc.left)/2-szMine.cx/2;
-		rc.top += (rc.bottom-rc.top)/2-szMine.cy/2;
+		rc.left += rc.Width()/2-szMine.cx/2;
+		rc.top += rc.Height()/2-szMine.cy/2;
 		rc.right = rc.left +szMine.cx;
 		rc.bottom = rc.top + szMine.cy;
 
@@ -693,8 +691,10 @@ class MainDialog extends soui4.JsHostWnd{
 	onAniStartUpdate(ani){
 		let fraction = ani.GetFraction();
 
-		let aniFrame = this.FindIChildByName("wnd_ani_start");
+		let aniFrame = this.FindIChildByName("wnd_effect");
 		let rc = aniFrame.GetClientRect();
+		console.log("rcBoard:",rc.left,rc.top,rc.right,rc.bottom);
+
 		let rcFrame = new soui4.CRect(rc.left,rc.top,rc.right,rc.bottom);
 		
 		rc.left += (rc.right-rc.left)/2;
@@ -720,7 +720,7 @@ class MainDialog extends soui4.JsHostWnd{
 	}
 
 	onAniStartEnd(ani){
-		let aniFrame = this.FindIChildByName("wnd_ani_start");
+		let aniFrame = this.FindIChildByName("wnd_effect");
 		aniFrame.SetVisible(false,true);
 		aniFrame.DestroyAllChildren();
 		if(this.settings.autoStart){
@@ -771,7 +771,7 @@ class MainDialog extends soui4.JsHostWnd{
 		btnHelp.SetWindowText("帮助("+(this.helpTimes - this.help_cost)+")");
 		btnHelp.SetVisible(this.helpTimes>0,true);
 
-		this.FindIChildByName("wnd_ani_start").SetVisible(true,true);
+		this.FindIChildByName("wnd_effect").SetVisible(true,true);
 		//start a new value animator
 		this.aniStart = new soui4.SValueAnimator();
 		this.aniStart.cbHandler = this;
@@ -791,15 +791,85 @@ class MainDialog extends soui4.JsHostWnd{
 		stack_result.SetVisible(false,true);
 	}
 
+	onAniGoldStart(ani){
+	}
+
+	onAniGoldUpdate(ani){
+		let wndEffect = this.FindIChildByName("wnd_effect");
+		let fraction = ani.GetFraction();
+		fraction *=3;
+		let wndGold = wndEffect.GetIChild(1);
+
+		let idx = ani.GetIValueAnimator().GetID();
+		let pos = this.board.index2cord(idx);
+
+		let rcBoard = wndEffect.GetClientRect();
+		let ptCenter = rcBoard.CenterPoint();
+
+		let mine=this.FindIChildByID(base_id);
+		let szMine = mine.GetWindowRect();
+		if(fraction<2){
+			//do round
+			fraction -= Math.floor(fraction);
+			const radius = 200;
+			let x = Math.round(radius*Math.cos(fraction*(Math.PI*2))+ptCenter.x);
+			let y = Math.round(radius*Math.sin(fraction*(Math.PI*2))+ptCenter.y);
+			let rcGold = new soui4.CRect(x,y,x,y);
+			rcGold.InflateRect(szMine.Width()/2,szMine.Height()/2,szMine.Width()/2,szMine.Height()/2);
+			wndGold.Move(rcGold);
+		}else{
+			//move to dest pos
+			fraction-=2;
+			let xEnd = rcBoard.left + rcBoard.Width()/this.board.cols*pos.x;
+			let yEnd = rcBoard.top + rcBoard.Height()/this.board.rows*pos.y;
+
+			let x = ptCenter.x + (xEnd-ptCenter.x)*fraction;
+			let y = ptCenter.y + (yEnd-ptCenter.y)*fraction;
+			let rcGold = wndGold.GetClientRect();
+			rcGold.MoveToXY(x,y);
+			wndGold.Move(rcGold);
+		}
+	}
+
+	onAniGoldEnd(ani){
+		let btnHelp=this.FindIChildByName("btn_help");
+		let wndEffect = this.FindIChildByName("wnd_effect");
+		wndEffect.SetVisible(false,true);
+		if(ani!=null){
+			let idx = ani.GetIValueAnimator().GetID();
+			console.log("get animator id ",idx);
+			let pos = this.board.index2cord(idx);
+			this.board.setMine(pos.x,pos.y,false);
+			this.help_cost++;
+			btnHelp.SetWindowText("求助("+(this.helpTimes - this.help_cost)+")");		
+		}
+		btnHelp.EnableWindow(true);
+	}
+
 	onBtnHelp(e){
 		if(this.timer!=null){
-			if(this.help_cost<this.helpTimes){
-				let pos = this.board.getSafeGrid();
-				if(pos.x!=-1)
-					this.board.setMine(pos.x,pos.y,false);
-				let btnHelp=this.FindIChildByName("btn_help");
-				this.help_cost++;
-				btnHelp.SetWindowText("帮助("+(this.helpTimes - this.help_cost)+")");		
+			let btnHelp = soui4.toIWindow(e.Sender());
+			let pos = this.board.getSafeGrid();
+			if(pos.x!=-1 && this.help_cost<this.helpTimes){
+				btnHelp.EnableWindow(false);
+				let wndEffect = this.FindIChildByName("wnd_effect");
+				wndEffect.DestroyAllChildren();
+				wndEffect.SetVisible(true,true);
+				let idx = this.board.cord2index(pos.x,pos.y);			
+				wndEffect.CreateChildrenFromXml('<t:g.gold><data id="'+idx+'"/></t:g.gold>');
+				//start a new value animator
+				this.aniGold = new soui4.SValueAnimator();
+				this.aniGold.cbHandler = this;
+				if(this.aniGold.LoadAniamtor("anim:gold")){
+					console.log("!!!set animator id ",idx);
+					this.aniGold.GetIValueAnimator().SetID(idx);
+					this.aniGold.onAnimationStart=this.onAniGoldStart;
+					this.aniGold.onAnimationUpdate = this.onAniGoldUpdate;
+					this.aniGold.onAnimationEnd = this.onAniGoldEnd;
+					this.aniGold.Start(this.GetIRoot().GetContainer());
+				}else{
+					this.onAniGoldEnd(null);
+				}
 			}
 		}else{
 			soui4.SMessageBox(this.GetHwnd(),"游戏还没有开始","提示",soui4.MB_OK);
