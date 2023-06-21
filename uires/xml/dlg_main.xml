@@ -35,13 +35,14 @@ translucent="1"
 					<!--成功-->
 					<window layout="vbox" gravity="center">
 						<!--记录-->
-						<window size="0,0" weight="1"/>
-						<window size="-1,-1" layout="vbox" colorBkgnd="@color/gray">
+						<window size="0,0" weight="2"/>
+						<window size="-1,-1" layout="vbox" skin="bk_history" padding="10" interval="10">
 							<window size="-1,-1" layout="hbox" font="adding:5">
 								<text text="最好成绩:"/>
 								<text name="txt_best" colorText="@color/red"/>
+								<text text="秒"/>
 							</window>
-							<window size="-2,-1" layout="vbox" interval="5" name="wnd_history" font="adding:4"/>
+							<window size="-2,-1" layout="gridlayout"  gravity="fill" columnCount="2" interval="5" name="wnd_history" font="adding:4"/>
 						</window>
 						<window size="0,0" weight="1"/>
 					</window>
