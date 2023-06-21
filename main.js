@@ -510,6 +510,8 @@ class MainDialog extends soui4.JsHostWnd{
 	}
 
 	setTimeCost(num){
+		if(num>999)
+			return;
 		let dig0 = num%10;
 		let dig1 = num/10%10;
 		let dig2 = num/100%10;
