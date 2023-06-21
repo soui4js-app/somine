@@ -380,6 +380,13 @@ class MainDialog extends soui4.JsHostWnd{
 		this.time_cost = 0;
 		this.helpTimes = 0;
 		this.help_cost = 0;
+		this.record=[{best:10000,his:[]},{best:10000,his:[]},{best:10000,his:[]}];
+		f = std.open(g_workDir+"\\record.json","r");
+		if(f!=null){
+			let str = f.readAsString();
+			this.record = JSON.parse(str);	
+			f.close();
+		}
 	}
 
 	playSound(bWin){
@@ -421,8 +428,37 @@ class MainDialog extends soui4.JsHostWnd{
 					}
 				}
 			}
+		}else{
+			//update record
+			let record = this.record[this.mode];
+			record.his.push({time_cost:this.time_cost,time:100});
+			if(record.his.length>10){
+				//max to 10 record
+				record.his.splice(0,1);
+			}
+			if(this.time_cost<record.best){
+				record.best = this.time_cost;
+			}
+			//render history view
+			this.FindIChildByName("txt_best").SetWindowText(""+record.best);
+			let xml=this.buildHistory(record.his);
+			let wndHistory = this.FindIChildByName("wnd_history");
+			wndHistory.DestroyAllChildren();
+			wndHistory.CreateChildrenFromXml(xml);
 		}
 		this.playSound(bSucceed);
+	}
+
+	buildHistory(history){
+		let head="<t:g.history>";
+		let tail="</t:g.history>";
+		let xml="";
+		
+		for(let i=0;i<history.length;i++){
+			let ele = "<data time_cost=\""+ history[i].time_cost +"\" time=\""+ history[i].time+"\"/>";
+			xml += head+ele+tail;
+		}
+		return xml;
 	}
 
 	onSetGridState(mode,x,y,state){
@@ -901,6 +937,11 @@ class MainDialog extends soui4.JsHostWnd{
 			let f = std.open(g_workDir+"\\settings.json", "w");
 			let settingStr = JSON.stringify(this.settings);
 			f.puts(settingStr);
+			f.close();
+
+			f = std.open(g_workDir+"\\record.json","w");
+			let str = JSON.stringify(this.record);
+			f.puts(str);
 			f.close();
 		}catch(e){
 			console.log(e);

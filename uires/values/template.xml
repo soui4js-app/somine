@@ -35,4 +35,11 @@
   <g.gold>
   	<img id="{{id}}" size="-1,-1" skin="img_gold"/>
   </g.gold>
+  <g.history>
+    <window size="-1,-1" layout="hbox">
+  	  <text text="{{time_cost}}"/>
+      <text text="-"/>
+      <text text="{{time}}"/>
+    </window>
+  </g.history>
 </template>

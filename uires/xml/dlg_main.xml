@@ -26,14 +26,33 @@ translucent="1"
 			<include src="xml:digit" name="digit_time_0"/>
 		</window> 
 		<stack size="-1,-1" curSel="-2" colorBkgnd1="@color/red">
-			<window name="wnd_board" layout="gridlayout" interval="0" gravity="fill"/>
-			<stack size="-2,-2" name="stack_result" visible="0" curSel="-1" aniType="push" vertical="1" duration="2000">
+			<window name="wnd_board" layout="gridlayout" interval="0" gravity="fill">
 				<!--地雷层-->
-				<window name="wnd_win" layout="vbox" gravity="center">
-					<img skin="img_congratulations"/>
-					<animateimg skin="skin_win" name="ani_win" autoStart="1" speed="100"/>
-				</window>
-				<window name="wnd_fail" layout="vbox" gravity="center">
+			</window>
+			<stack size="-2,-2" name="stack_result" visible="0" curSel="-1" aniType="push" vertical="1" duration="2000">
+				<!--结果显示层-->			
+				<stack name="wnd_win" curSel="-2">
+					<!--成功-->
+					<window layout="vbox" gravity="center">
+						<!--记录-->
+						<window size="0,0" weight="1"/>
+						<window size="-1,-1" layout="vbox" colorBkgnd="@color/gray">
+							<window size="-1,-1" layout="hbox" font="adding:5">
+								<text text="最好成绩:"/>
+								<text name="txt_best" colorText="@color/red"/>
+							</window>
+							<window size="-2,-1" layout="vbox" interval="5" name="wnd_history" font="adding:4"/>
+						</window>
+						<window size="0,0" weight="1"/>
+					</window>
+					<window layout="vbox" gravity="center" msgTranparent="1">
+						<!--庆祝动画-->
+						<img skin="img_congratulations"/>
+						<animateimg skin="skin_win" name="ani_win" autoStart="1" speed="100"/>
+					</window>
+				</stack>
+				<window name="wnd_fail" layout="vbox" gravity="center"  size="-2,-2">
+					<!--失败-->
 					<img skin="img_better_luck"/>
 					<animateimg skin="skin_fail" name="ani_fail" autoStart="1" speed="100"/>
 				</window>
