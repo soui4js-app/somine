@@ -37,9 +37,9 @@
   </g.gold>
   <g.history>
     <window size="-1,-1" layout="hbox">
-  	  <text text="{{time_cost}}"/>
-      <text text="-"/>
       <text text="{{time}}"/>
+  	  <text text="{{time_cost}}" extend_left="10"/>
+      <text text="秒"/>
     </window>
   </g.history>
 </template>
