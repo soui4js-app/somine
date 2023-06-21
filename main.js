@@ -768,10 +768,12 @@ class MainDialog extends soui4.JsHostWnd{
 		this.helpTimes = bi.helpTimes;
 		this.help_cost = 0;
 		let btnHelp=this.FindIChildByName("btn_help");
-		btnHelp.SetWindowText("帮助("+(this.helpTimes - this.help_cost)+")");
+		btnHelp.SetWindowText("求助("+(this.helpTimes - this.help_cost)+")");
 		btnHelp.SetVisible(this.helpTimes>0,true);
 
-		this.FindIChildByName("wnd_effect").SetVisible(true,true);
+		let wndEffect = this.FindIChildByName("wnd_effect")
+		wndEffect.DestroyAllChildren();
+		wndEffect.SetVisible(true,true);
 		//start a new value animator
 		this.aniStart = new soui4.SValueAnimator();
 		this.aniStart.cbHandler = this;
@@ -789,9 +791,6 @@ class MainDialog extends soui4.JsHostWnd{
 		this.onReset();
 		let stack_result = this.FindIChildByName("stack_result");
 		stack_result.SetVisible(false,true);
-	}
-
-	onAniGoldStart(ani){
 	}
 
 	onAniGoldUpdate(ani){
@@ -863,7 +862,6 @@ class MainDialog extends soui4.JsHostWnd{
 				if(this.aniGold.LoadAniamtor("anim:gold")){
 					console.log("!!!set animator id ",idx);
 					this.aniGold.GetIValueAnimator().SetID(idx);
-					this.aniGold.onAnimationStart=this.onAniGoldStart;
 					this.aniGold.onAnimationUpdate = this.onAniGoldUpdate;
 					this.aniGold.onAnimationEnd = this.onAniGoldEnd;
 					this.aniGold.Start(this.GetIRoot().GetContainer());
