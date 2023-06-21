@@ -42,7 +42,7 @@ translucent="1"
 								<text name="txt_best" colorText="@color/red"/>
 								<text text="秒"/>
 							</window>
-							<window size="-2,-1" layout="vbox" interval="5" name="wnd_history" font="adding:4"/>
+							<window size="-2,-1" layout="gridlayout"  gravity="fill" columnCount="2" interval="5" name="wnd_history" font="adding:4"/>
 						</window>
 						<window size="0,0" weight="1"/>
 					</window>

@@ -36,9 +36,9 @@
   	<img id="{{id}}" size="-1,-1" skin="img_gold"/>
   </g.gold>
   <g.history>
-    <window size="-1,-1" layout="hbox">
-      <text text="{{time}}"/>
-  	  <text text="{{time_cost}}" extend_left="10"/>
+    <text text="{{time}}" size="-1,-1"/>
+    <window size="-1,-1" layout="hbox" columnWeight="1">
+  	  <text text="{{time_cost}}" weight="1" align="right"/>
       <text text="秒"/>
     </window>
   </g.history>
