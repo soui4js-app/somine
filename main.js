@@ -389,11 +389,10 @@ class MainDialog extends soui4.JsHostWnd{
 		}
 	}
 
-	playSound(bWin){
+	playSound(file){
 		if(!this.settings.enableSound)
 			return;
-		let sound = g_workDir+"\\Sound\\";
-		sound += bWin?"win.wav":"lose.wav";
+		let sound = g_workDir+"\\Sound\\"+file;
 		utils.PlaySound(sound,false);
 	}
 	onResult(bSucceed){
@@ -449,7 +448,7 @@ class MainDialog extends soui4.JsHostWnd{
 		stackApi.SelectPage(bSucceed?0:1,true);
 		stackApi.Release();
 		this.endTick();
-		this.playSound(bSucceed);
+		this.playSound(bSucceed?"win.wav":"lose.wav");
 	}
 
 	buildHistory(history){
@@ -666,11 +665,11 @@ class MainDialog extends soui4.JsHostWnd{
 	}
 
 	onWinAniRepeat(e){
-		this.playSound(true);
+		this.playSound("win.wav");
 	}
 
 	onFailAniRepeat(e){
-		this.playSound(false);
+		this.playSound("lose.wav");
 	}
 	
 	buildBoard(mode){
@@ -906,6 +905,7 @@ class MainDialog extends soui4.JsHostWnd{
 					this.aniGold.onAnimationUpdate = this.onAniGoldUpdate;
 					this.aniGold.onAnimationEnd = this.onAniGoldEnd;
 					this.aniGold.Start(this.GetIRoot().GetContainer());
+					this.playSound("bless.wav");
 				}else{
 					this.onAniGoldEnd(null);
 				}
