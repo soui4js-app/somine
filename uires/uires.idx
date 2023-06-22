@@ -5,6 +5,7 @@
   <LAYOUT>
     <file name="dlg_main" path="xml\dlg_main.xml"/>
     <file name="dlg_option" path="xml\dlg_option.xml"/>
+    <file name="page_result" path="xml\page_result.xml"/>
   </LAYOUT>
   <xml>
     <file name="digit" path="xml\digit.xml"/>
