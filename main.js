@@ -183,9 +183,11 @@ class MineBoard{
 		}
 		}
 		if(pos.length==0)
+		{
 			return {x:-1,y:-1};
+		}	
 		else{
-			let idx = Math.round(Math.random()*pos.length);
+			let idx = Math.floor(Math.random()*pos.length);
 			return pos[idx];
 		}
 	}
