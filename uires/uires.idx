@@ -46,7 +46,6 @@
     <file name="img_congratulations" path="image\congratulations.png"/>
     <file name="img_better_luck" path="image\better-luck.png"/>
     <file name="img_gold" path="image\gold.png"/>
-    <file name="bk_history" path="image\history.png"/>
   </img>
   <anim>
     <file name="slide_show" path="anim\slide_show.xml"/>
