@@ -4,8 +4,12 @@
 	<stack name="wnd_win" curSel="-2">
 		<!--成功-->
 		<window layout="vbox" gravity="center">
+			<!--庆祝-->
+			<img skin="img_congratulations"/>
+		</window>
+		<window layout="vbox" gravity="center">
 			<!--记录-->
-			<window size="0,0" weight="2"/>
+			<window size="0,0" weight="1"/>
 			<window size="-1,-1" layout="vbox" skin="_skin.sys.wnd.bkgnd" padding="10" interval="10">
 				<window size="-1,-1" layout="hbox" font="adding:5">
 					<text text="最好成绩:"/>
@@ -16,15 +20,18 @@
 			</window>
 			<window size="0,0" weight="1"/>
 		</window>
-		<window layout="vbox" gravity="center" msgTranparent="1">
-			<!--庆祝动画-->
-			<img skin="img_congratulations"/>
+		<window >
+			<!--动画-->
 			<animateimg skin="skin_win" name="ani_win" autoStart="1" speed="100"/>
 		</window>
 	</stack>
-	<window name="wnd_fail" layout="vbox" gravity="center">
+	<stack name="wnd_fail" layout="vbox" gravity="center">
 		<!--失败-->
-		<img skin="img_better_luck"/>
-		<animateimg skin="skin_fail" name="ani_fail" autoStart="1" speed="100"/>
-	</window>
+		<window layout="vbox" gravity="center">
+			<img skin="img_better_luck"/>
+		</window>
+		<window id="10000">
+			<animateimg skin="skin_fail" name="ani_fail" autoStart="1" speed="100"/>
+		</window>
+	</stack>
 </stack>

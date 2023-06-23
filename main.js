@@ -427,10 +427,10 @@ class MainDialog extends soui4.JsHostWnd{
 			let record = this.record[this.mode];
 			let now = new Date();
 			let time = ""+now.getFullYear()+"/"+now.getMonth()+"/"+now.getDay()+" "+now.getHours()+":"+now.getMinutes()+":"+now.getSeconds();
-			record.his.push({time_cost:this.time_cost,time:time});
+			record.his.unshift({time_cost:this.time_cost,time:time});
 			if(record.his.length>10){
 				//max to 10 record
-				record.his.splice(0,1);
+				record.his.splice(record.his.length-1,1);
 			}
 			if(this.time_cost<record.best){
 				record.best = this.time_cost;
@@ -450,7 +450,10 @@ class MainDialog extends soui4.JsHostWnd{
 		stackApi.SelectPage(bSucceed?0:1,true);
 		stackApi.Release();
 		this.endTick();
-		this.playSound(bSucceed?"win.wav":"lose.wav");
+		if(bSucceed)
+			this.onWinAniRepeat(null);
+		else
+			this.onFailAniRepeat(null);
 	}
 
 	buildHistory(history){
@@ -667,10 +670,32 @@ class MainDialog extends soui4.JsHostWnd{
 	}
 
 	onWinAniRepeat(e){
+		let aniImg=null;
+		if(e==null){
+			aniImg = this.FindIChildByName("ani_win");
+		}else{
+			aniImg = soui4.toIWindow(e.Sender());
+		}
+		let rc = aniImg.GetIParent().GetClientRect();
+		let szImg = aniImg.GetDesiredSize(-1,-1);
+		let x = rc.left+ Math.round(Math.random()*(rc.Width()-szImg.cx));
+		let y = rc.top+ Math.round(Math.random()*(rc.Height()-szImg.cy));
+		aniImg.Move2(x,y,szImg.cx,szImg.cy);
 		this.playSound("win.wav");
 	}
 
 	onFailAniRepeat(e){
+		let aniImg=null;
+		if(e==null){
+			aniImg = this.FindIChildByName("ani_fail");
+		}else{
+			aniImg = soui4.toIWindow(e.Sender());
+		}
+		let rc = aniImg.GetIParent().GetClientRect();
+		let szImg = aniImg.GetDesiredSize(-1,-1);
+		let x = rc.left+ Math.round(Math.random()*(rc.Width()-szImg.cx));
+		let y = rc.top+ Math.round(Math.random()*(rc.Height()-szImg.cy));
+		aniImg.Move2(x,y,szImg.cx,szImg.cy);
 		this.playSound("lose.wav");
 	}
 	
