@@ -371,7 +371,7 @@ class MainDialog extends soui4.JsHostWnd{
 		let f = std.open(g_workDir+"\\settings.json", "r");
 		if(f!=null){
 			let settingStr = f.readAsString();
-			this.settings = JSON.parse(settingStr);	
+			Object.assign(this.settings,JSON.parse(settingStr));	
 			f.close();
 		}
 
@@ -382,11 +382,14 @@ class MainDialog extends soui4.JsHostWnd{
 		this.time_cost = 0;
 		this.helpTimes = 0;
 		this.help_cost = 0;
-		this.record=[{best:10000,his:[]},{best:10000,his:[]},{best:10000,his:[]}];
+		this.record=[{best:10000,win:0,fail:0,his:[]},{best:10000,win:0,fail:0,his:[]},{best:10000,win:0,fail:0,his:[]}];
 		f = std.open(g_workDir+"\\record.json","r");
 		if(f!=null){
 			let str = f.readAsString();
-			this.record = JSON.parse(str);	
+			let rec = JSON.parse(str);
+			for(let i=0;i<3;i++){
+				Object.assign(this.record[i],rec[i]);	
+			}
 			f.close();
 		}
 	}
@@ -399,7 +402,9 @@ class MainDialog extends soui4.JsHostWnd{
 	}
 	onResult(bSucceed){
 		console.log("game over");
+		let record = this.record[this.mode];
 		if(!bSucceed){
+			record.fail++;
 			//open all mines
 			for(let y=0;y<this.board.rows;y++){
 				for(let x=0;x<this.board.cols;x++)
@@ -423,8 +428,8 @@ class MainDialog extends soui4.JsHostWnd{
 				}
 			}
 		}else{
+			record.win++;
 			//update record
-			let record = this.record[this.mode];
 			let now = new Date();
 			let time = ""+now.getFullYear()+"/"+now.getMonth()+"/"+now.getDay()+" "+now.getHours()+":"+now.getMinutes()+":"+now.getSeconds();
 			record.his.unshift({time_cost:this.time_cost,time:time});
@@ -437,6 +442,9 @@ class MainDialog extends soui4.JsHostWnd{
 			}
 			//render history view
 			this.FindIChildByName("txt_best").SetWindowText(""+record.best);
+			let rate = (record.win/(record.win+record.fail));
+			rate = Math.round(rate*1000)/10;
+			this.FindIChildByName("txt_winrate").SetWindowText(""+record.win+"/"+(record.fail+record.win)+"="+rate+"%");
 			let xml=this.buildHistory(record.his);
 			let wndHistory = this.FindIChildByName("wnd_history");
 			wndHistory.DestroyAllChildren();

@@ -16,6 +16,10 @@
 					<text name="txt_best" colorText="@color/red"/>
 					<text text="秒"/>
 				</window>
+				<window size="-1,-1" layout="hbox" font="adding:5">
+					<text text="成功率:"/>
+					<text name="txt_winrate" colorText="@color/red"/>
+				</window>
 				<window size="-2,-1" layout="gridlayout"  gravity="fill" columnCount="2" interval="5" name="wnd_history" font="adding:4"/>
 			</window>
 			<window size="0,0" weight="1"/>
