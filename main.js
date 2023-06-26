@@ -431,7 +431,7 @@ class MainDialog extends soui4.JsHostWnd{
 			record.win++;
 			//update record
 			let now = new Date();
-			let time = ""+now.getFullYear()+"/"+now.getMonth()+"/"+now.getDay()+" "+now.getHours()+":"+now.getMinutes()+":"+now.getSeconds();
+			let time = ""+now.getFullYear()+"/"+(now.getMonth()+1)+"/"+now.getDate()+" "+now.getHours()+":"+now.getMinutes()+":"+now.getSeconds();
 			record.his.unshift({time_cost:this.time_cost,time:time});
 			if(record.his.length>10){
 				//max to 10 record
