@@ -11,7 +11,11 @@ translucent="1"
       	<imgbtn id="sysid_close" skin="_skin.sys.btn.close"    pos="-45,0" tip="close" animate="1"/>
     </caption>
     <window size="-2,-1" padding="5" layout="vbox" interval="10">
-      <text>本项目基于soui4js开发</text>
+      <text multilines="1" size="-2,-1">本项目基于soui4js开发,全部代码使用JS编码。</text>
+      <window size="-2,-1" layout="hbox">
+        <text>QQ群:</text>
+        <edit margin="2">385438344</edit>
+      </window>
     </window>
     <window size="-1,-1" layout="hbox" interval="50">
         <button size="100,30" id="IDOK" text="OK"/>
