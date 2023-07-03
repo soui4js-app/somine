@@ -662,19 +662,13 @@ class MainDialog extends soui4.JsHostWnd{
 		}
 	}
 
-	onOptBtn(e){
-		let dlgOption = new OptionDlg(this.settings);
-		if(dlgOption.DoModal(this.GetHwnd())==1){//1=IDOK
-			let oldSetting = {...this.settings};
-			this.settings = dlgOption.settings;
-			if(oldSetting.mode != this.settings.mode){
-				//regenerate board
-				this.onInitBoard(this.settings.mode);
-				this.GetIRoot().Update();
-				this.CenterWindow(0);
-				this.onBtnReset(e);
-			}
-		}
+	onBtnMenu(e){
+		let menu = new soui4.SMenu();
+		menu.LoadMenu("smenu:help");
+		let btn = soui4.toIWindow(e.Sender());
+		let rc = btn.GetWindowRect();
+		this.ClientToScreen2(rc);
+		menu.TrackPopupMenu(0,rc.left,rc.bottom,this.GetHwnd(),0,btn.GetScale());
 	}
 
 	onWinAniRepeat(e){
@@ -950,14 +944,43 @@ class MainDialog extends soui4.JsHostWnd{
 		}
 	}
 
+	onMenuCmd(e){
+		let menuCmd = soui4.toEventMenuCmd(e);
+		switch(menuCmd.menuId)
+		{
+			case 100:{
+			//show setting dialog
+			let dlgOption = new OptionDlg(this.settings);
+			if(dlgOption.DoModal(this.GetHwnd())==1){//1=IDOK
+				let oldSetting = {...this.settings};
+				this.settings = dlgOption.settings;
+				if(oldSetting.mode != this.settings.mode){
+					//regenerate board
+					this.onInitBoard(this.settings.mode);
+					this.GetIRoot().Update();
+					this.CenterWindow(0);
+					this.onBtnReset(e);
+				}
+			}
+			break;
+			}
+			case 101:{
+				//show about dialog
+				let dlgAbout= new soui4.JsHostDialog("layout:dlg_about");
+				dlgAbout.DoModal(this.GetHwnd());
+				break;
+			}
+		}
+	}
+
 	init(){
 		console.log("init");
 		soui4.SConnect(this.FindIChildByName("btn_reset"),soui4.EVT_CMD,this,this.onBtnReset);
 		soui4.SConnect(this.FindIChildByName("btn_help"),soui4.EVT_CMD,this,this.onBtnHelp);
-		soui4.SConnect(this.FindIChildByName("btn_option"),soui4.EVT_CMD,this,this.onOptBtn);
+		soui4.SConnect(this.FindIChildByName("btn_menu"),soui4.EVT_CMD,this,this.onBtnMenu);
 		soui4.SConnect(this.FindIChildByName("ani_win"),soui4.EVT_IMAGE_ANI_REPEAT,this,this.onWinAniRepeat);
 		soui4.SConnect(this.FindIChildByName("ani_fail"),soui4.EVT_IMAGE_ANI_REPEAT,this,this.onFailAniRepeat);
-
+		soui4.SConnect(this.GetIRoot(),soui4.EVT_MENU_CMD,this,this.onMenuCmd);
 		
 		this.onInitBoard(this.settings.mode);
 		this.GetIRoot().Update();

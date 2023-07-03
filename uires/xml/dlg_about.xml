@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SOUI name="about" title="@string/about" bigIcon="ICON_LOGO:32" smallIcon="ICON_LOGO:16" margin="5,5,5,5"  resizable="0" wndType="normal"
+translucent="1"
+>
+  <root skin="_skin.sys.wnd.bkgnd" cache="1"  width="300" height="200" layout="vbox" gravity="center" interval="10" 
+    enterAnimation="anim:slide_show" exitAnimation="anim:slide_hide">
+    <caption size="-2,30" layout="hbox" gravity="center">
+      <icon src="ICON_LOGO:16"/>
+      <text>@string/about</text>
+      <window size="0,0" weight="1"/>
+      	<imgbtn id="sysid_close" skin="_skin.sys.btn.close"    pos="-45,0" tip="close" animate="1"/>
+    </caption>
+    <window size="-2,-1" padding="5" layout="vbox" interval="10">
+      <text>本项目基于soui4js开发</text>
+    </window>
+    <window size="-1,-1" layout="hbox" interval="50">
+        <button size="100,30" id="IDOK" text="OK"/>
+    </window>
+  </root>
+</SOUI>

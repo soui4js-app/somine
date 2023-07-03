@@ -5,6 +5,7 @@
   <LAYOUT>
     <file name="dlg_main" path="xml\dlg_main.xml"/>
     <file name="dlg_option" path="xml\dlg_option.xml"/>
+    <file name="dlg_about" path="xml\dlg_about.xml"/>
     <file name="page_result" path="xml\page_result.xml"/>
   </LAYOUT>
   <xml>
@@ -46,6 +47,7 @@
     <file name="img_congratulations" path="image\congratulations.png"/>
     <file name="img_better_luck" path="image\better-luck.png"/>
     <file name="img_gold" path="image\gold.png"/>
+    <file name="menu_icons" path="image\menu_icons.png"/>
   </img>
   <anim>
     <file name="slide_show" path="anim\slide_show.xml"/>
@@ -53,4 +55,7 @@
     <file name="start" path="anim\start.xml"/>
     <file name="gold" path="anim\gold.xml"/>
   </anim>
+  <smenu>
+    <file name="help" path="smenu\help.xml"/>
+  </smenu>
 </resource>

@@ -7,7 +7,7 @@ translucent="1"
 		<icon src="ICON_LOGO:16"/>
 		<text>@string/title</text>
 		<window size="0,0" weight="1"/>
-		<imgbtn name="btn_option" tip="option" skin="btn_config"/>
+		<imgbtn name="btn_menu" tip="帮助菜单" skin="btn_config"/>
 		<imgbtn id="sysid_min" skin="_skin.sys.btn.minimize" animate="1" />
       	<imgbtn id="sysid_close" skin="_skin.sys.btn.close"   tip="close" animate="1"/>
     </caption>

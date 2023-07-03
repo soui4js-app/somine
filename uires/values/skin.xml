@@ -26,4 +26,5 @@
    <imglist name="img_congratulations" src="img:img_congratulations"/>
    <imglist name="img_better_luck" src="img:img_better_luck"/>
    <imglist name="img_gold" src="img:img_gold"/>
+   <imglist name="menu_icons" src="img:menu_icons" states="2"/>
 </skin>
