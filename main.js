@@ -2,6 +2,7 @@
 import * as os from "os";
 import * as std from "std";
 import * as utils from "utils.dll";
+import {R} from "./uires/R.js";
 
 var g_workDir="";
 
@@ -996,12 +997,12 @@ class MainDialog extends soui4.JsHostWnd{
 		//save to file.
 		try{
 			let f = std.open(g_workDir+"\\settings.json", "w");
-			let settingStr = JSON.stringify(this.settings);
+			let settingStr = JSON.stringify(this.settings,null,4);
 			f.puts(settingStr);
 			f.close();
 
 			f = std.open(g_workDir+"\\record.json","w");
-			let str = JSON.stringify(this.record);
+			let str = JSON.stringify(this.record,null,4);
 			f.puts(str);
 			f.close();
 		}catch(e){
@@ -1011,12 +1012,13 @@ class MainDialog extends soui4.JsHostWnd{
 	}
 };
 
-
 function main(inst,workDir,args)
 {
 	soui4.log(workDir);
 	g_workDir = workDir;
 	let theApp = soui4.GetApp();
+	let res = theApp.InitXmlNamedID(R.name_arr,R.id_arr);
+	console.log("InitXmlNamedID ret:",res);
 	let souiFac = soui4.CreateSouiFactory();
 	//*
 	let resProvider = souiFac.CreateResProvider(1);
