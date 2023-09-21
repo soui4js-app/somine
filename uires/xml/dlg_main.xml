@@ -25,7 +25,7 @@ translucent="1"
 			<include src="xml:digit" name="digit_time_1"/>
 			<include src="xml:digit" name="digit_time_0"/>
 		</window> 
-		<stack size="-1,-1" curSel="-2" colorBkgnd1="@color/red">
+		<stack size="-1,-1" curSel="-2">
 			<window name="wnd_board" layout="gridlayout" interval="0" gravity="fill">
 				<!--地雷层-->
 			</window>

@@ -454,7 +454,7 @@ class MainDialog extends soui4.JsHostWnd{
 		//
 		let stack_result = this.FindIChildByName("stack_result");
 		let stackApi = soui4.QiIStackView(stack_result);
-		stackApi.SelectPage(-1,false);
+		stackApi.SelectPage(-1,false);//hide previous page
 		stack_result.SetVisible(true,true);
 		stackApi.SelectPage(bSucceed?0:1,true);
 		stackApi.Release();
@@ -958,7 +958,7 @@ class MainDialog extends soui4.JsHostWnd{
 				if(oldSetting.mode != this.settings.mode){
 					//regenerate board
 					this.onInitBoard(this.settings.mode);
-					this.GetIRoot().Update();
+					this.GetIRoot().Update(false);
 					this.CenterWindow(0);
 					this.onBtnReset(e);
 				}
@@ -984,7 +984,7 @@ class MainDialog extends soui4.JsHostWnd{
 		soui4.SConnect(this.GetIRoot(),soui4.EVT_MENU_CMD,this,this.onMenuCmd);
 		
 		this.onInitBoard(this.settings.mode);
-		this.GetIRoot().Update();
+		this.GetIRoot().Update(false);
 		this.CenterWindow(0);
 		this.onReset();
 	}
