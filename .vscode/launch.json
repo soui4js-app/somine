@@ -6,7 +6,7 @@
     "type":"quickjs",
     "request":"launch",
     "program":"${workspaceFolder}",
-    "runtimeExecutable":"D:\\qjs\\soui4js/bin/soui4js-host.exe",
+    "runtimeExecutable":"D:\\work\\soui4js/bin/soui4js-host.exe",
     "address":"localhost",
     "port":58585}
     ]

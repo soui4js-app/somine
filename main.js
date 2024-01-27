@@ -676,6 +676,10 @@ class MainDialog extends soui4.JsHostWnd{
 		let aniImg=null;
 		if(e==null){
 			aniImg = this.FindIChildByName("ani_win");
+			let aniApi = soui4.QiIAnimateImgWnd(aniImg);
+			aniApi.Stop();
+			aniApi.Start();
+			aniApi.Release();
 		}else{
 			aniImg = soui4.toIWindow(e.Sender());
 		}
@@ -691,6 +695,10 @@ class MainDialog extends soui4.JsHostWnd{
 		let aniImg=null;
 		if(e==null){
 			aniImg = this.FindIChildByName("ani_fail");
+			let aniApi = soui4.QiIAnimateImgWnd(aniImg);
+			aniApi.Stop();
+			aniApi.Start();
+			aniApi.Release();
 		}else{
 			aniImg = soui4.toIWindow(e.Sender());
 		}
