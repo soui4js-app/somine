@@ -194,7 +194,7 @@ class MineBoard{
 	}
 
 	setMine(x,y,isMine){
-		if(this.getState(x,y)!=Status.init)
+		if(this.getState(x,y)!=Status.init && this.getState(x,y) != Status.flag_ques)
 			return true;
 		let state = isMine?Status.flag_mine:Status.clear;
 		if(this.board[y][x].mine && !isMine)
@@ -269,7 +269,7 @@ class MineBoard{
 				for(let j=x1;j<=x2 && bContinue;j++){
 					if(i==y && j==x)
 						continue;
-					if(this.board[i][j].state == Status.init)
+					if(this.board[i][j].state == Status.init || this.board[i][j].state == Status.flag_ques)
 					{
 						bContinue = this.setMine(j,i,false);						
 					}
