@@ -633,7 +633,8 @@ class MainDialog extends soui4.JsHostWnd{
 	}
 
 	onGridCmd(x,y,bCancel){
-		if(this.board.getState(x,y)!=Status.init)
+		let state = this.board.getState(x,y);
+		if(state!=Status.init && state != Status.flag_ques)
 			return;
 		console.log("onGridCmd",y,x,bCancel);
 		if(bCancel)
