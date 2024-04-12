@@ -368,6 +368,8 @@ class MainDialog extends soui4.JsHostWnd{
 	constructor(){
 		super("layout:dlg_main");
 		this.onEvt = this.onEvent;
+		this.onMsg = this.onMessage;
+		this.isActive = true;
 		this.settings={mode:Mode.easy,enableQuestion:true,autoStart:true,enableSound:true};
 		let f = std.open(g_workDir+"\\settings.json", "r");
 		if(f!=null){
@@ -494,6 +496,13 @@ class MainDialog extends soui4.JsHostWnd{
 		this.setRemainMine(this.board.getRemain());
 	}
 
+	onMessage(hWnd,uMsg,wp,lp,msgHandle){
+		if(uMsg == 6){
+			this.isActive = (wp&0x0000ffff)!=0 && (wp&0xffff0000)==0;
+			console.log("active="+this.isActive + " wp="+wp);
+		}
+	}
+
 	onEvent(e){
 		let evt_id = e.GetID();
 		if(evt_id==soui4.EVT_INIT){//event_init
@@ -572,8 +581,10 @@ class MainDialog extends soui4.JsHostWnd{
 		this.setDigit("digit_time_2",dig2);
 	}
 	onTick(){
-		this.time_cost++;
-		this.setTimeCost(this.time_cost);
+		if(this.isActive){
+			this.time_cost++;
+			this.setTimeCost(this.time_cost);	
+		}
 		this.timer = os.setTimeout(this.onTick, 1000,this);
 	}
 
