@@ -932,7 +932,7 @@ class MainDialog extends soui4.JsHostWnd{
 			this.help_cost++;
 			btnHelp.SetWindowText("求助("+(this.helpTimes - this.help_cost)+")");		
 		}
-		btnHelp.EnableWindow(true);
+		btnHelp.EnableWindow(true,true);
 	}
 
 	onBtnHelp(e){
@@ -940,7 +940,7 @@ class MainDialog extends soui4.JsHostWnd{
 			let btnHelp = soui4.toIWindow(e.Sender());
 			let pos = this.board.getSafeGrid();
 			if(pos.x!=-1 && this.help_cost<this.helpTimes){
-				btnHelp.EnableWindow(false);
+				btnHelp.EnableWindow(false,true);
 				let wndEffect = this.FindIChildByName("wnd_effect");
 				wndEffect.DestroyAllChildren();
 				wndEffect.SetVisible(true,true);
