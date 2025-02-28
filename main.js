@@ -371,7 +371,7 @@ class MainDialog extends soui4.JsHostWnd{
 		this.onMsg = this.onMessage;
 		this.isActive = true;
 		this.settings={mode:Mode.easy,enableQuestion:true,autoStart:true,enableSound:true};
-		let f = std.open(g_workDir+"\\settings.json", "r");
+		let f = std.open(g_workDir+"/settings.json", "r");
 		if(f!=null){
 			let settingStr = f.readAsString();
 			Object.assign(this.settings,JSON.parse(settingStr));	
@@ -386,7 +386,7 @@ class MainDialog extends soui4.JsHostWnd{
 		this.helpTimes = 0;
 		this.help_cost = 0;
 		this.record=[{best:10000,win:0,fail:0,his:[]},{best:10000,win:0,fail:0,his:[]},{best:10000,win:0,fail:0,his:[]}];
-		f = std.open(g_workDir+"\\record.json","r");
+		f = std.open(g_workDir+"/record.json","r");
 		if(f!=null){
 			let str = f.readAsString();
 			let rec = JSON.parse(str);
@@ -400,7 +400,7 @@ class MainDialog extends soui4.JsHostWnd{
 	playSound(file){
 		if(!this.settings.enableSound)
 			return;
-		let sound = g_workDir+"\\Sound\\"+file;
+		let sound = g_workDir+"/Sound/"+file;
 		utils.PlaySound(sound,false);
 	}
 	onResult(bSucceed){
@@ -1016,12 +1016,12 @@ class MainDialog extends soui4.JsHostWnd{
 
 		//save to file.
 		try{
-			let f = std.open(g_workDir+"\\settings.json", "w");
+			let f = std.open(g_workDir+"/settings.json", "w");
 			let settingStr = JSON.stringify(this.settings,null,4);
 			f.puts(settingStr);
 			f.close();
 
-			f = std.open(g_workDir+"\\record.json","w");
+			f = std.open(g_workDir+"/record.json","w");
 			let str = JSON.stringify(this.record,null,4);
 			f.puts(str);
 			f.close();
@@ -1042,11 +1042,11 @@ function main(inst,workDir,args)
 	let souiFac = soui4.CreateSouiFactory();
 	//*
 	let resProvider = souiFac.CreateResProvider(1);
-	soui4.InitFileResProvider(resProvider,workDir + "\\uires");
+	soui4.InitFileResProvider(resProvider,workDir + "/uires");
 	//*/
 	/*
 	// show how to load resource from a zip file
-	let resProvider = soui4.CreateZipResProvider(theApp,workDir +"\\uires.zip","souizip");
+	let resProvider = soui4.CreateZipResProvider(theApp,workDir +"/uires.zip","souizip");
 	if(resProvider === 0){
 		soui4.log("load res from uires.zip failed");
 		return -1;
