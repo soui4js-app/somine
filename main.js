@@ -516,8 +516,8 @@ class MainDialog extends soui4.JsHostWnd{
 				let cord = this.board.index2cord(id - base_id);
 				let clickId = evt.clickId;
 				let flags = evt.uFlags;
-				if((clickId==soui4.MOUSE_LBTN_DOWN && (flags&soui4.MK_RBUTTON))
-				||(clickId==soui4.MOUSE_RBTN_DOWN && (flags&soui4.MK_LBUTTON))){
+				if(((clickId==soui4.MOUSE_LBTN_DOWN ||clickId==soui4.MOUSE_LBTN_DBCLICK) && (flags&soui4.MK_RBUTTON))
+				||((clickId==soui4.MOUSE_RBTN_DOWN||clickId==soui4.MOUSE_RBTN_DBCLICK) && (flags&soui4.MK_LBUTTON))){
 					this.bothClick = true;
 					this.onBothClick(cord.x,cord.y);
 				}else if(clickId == soui4.MOUSE_LBTN_DOWN)
