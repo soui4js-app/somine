@@ -1007,6 +1007,9 @@ class MainDialog extends soui4.JsHostWnd{
 		this.GetIRoot().Update(false);
 		this.CenterWindow(0);
 		this.onReset();
+		//don't care other events.
+		this.RequireEventForCtrlID(soui4.EVT_MOUSE_CLICK,-1,true);
+		this.RequireMessage(6,true);
 	}
 
 	uninit(){
