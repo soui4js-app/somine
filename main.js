@@ -527,28 +527,23 @@ class MainDialog extends soui4.JsHostWnd{
 				}else if(clickId == soui4.MOUSE_RBTN_DOWN){
 					this.clickGrid = cord;
 				}
-				else if(clickId == soui4.MOUSE_LBTN_UP)
+				else if(clickId == soui4.MOUSE_LBTN_UP || clickId == soui4.MOUSE_RBTN_UP)
 				{
-					let bCancel = !(cord.x == this.clickGrid.x && cord.y == this.clickGrid.y && evt.bHover);
+					//set max diff to 3
+					let diff = Math.abs(cord.x-this.clickGrid.x)+Math.abs(cord.y-this.clickGrid.y);
+					let bCancel = diff>3;
 					if(this.bothClick){
 						this.onBothRelease(cord.x,cord.y,bCancel);
 						this.bothClick=false;
-					}else
+					}else if(clickId == soui4.MOUSE_LBTN_UP)
 					{
 						this.onGridCmd(cord.x,cord.y,bCancel);
+					}else if(!bCancel)
+					{
+						this.onGridRclick(cord.x,cord.y);
 					}
 					this.clickGrid.x = -1;											
 				}	
-				else if(clickId == soui4.MOUSE_RBTN_UP){
-					let bCancel = !(cord.x == this.clickGrid.x && cord.y == this.clickGrid.y && evt.bHover);
-					if(this.bothClick){
-						this.onBothRelease(cord.x,cord.y,bCancel);
-						this.bothClick=false;
-					}
-					else if(!bCancel)
-						this.onGridRclick(cord.x,cord.y);
-					this.clickGrid.x = -1;	
-				}
 			}
 		}
 		return false;
